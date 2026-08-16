@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Set up admin — MathCloud UCAT Coaching</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-functions-compat.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="setupBanner">
+  ⚠ Firebase isn't connected yet. Paste your project keys into <code>firebaseConfig</code> in shared.js, then reload.
+</div>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="role-tag">One-time setup</span>
+    <h1>Create the first admin account</h1>
+    <p style="color:var(--ink-soft); font-size:13.5px; margin:0;">
+      This page only works once. As soon as one admin account exists for this
+      project, it stops working — every other account after this, including
+      additional admins, gets created from inside the Accounts page once
+      you're signed in.
+    </p>
+    <form id="setupForm">
+      <label for="name">Your name</label>
+      <input type="text" id="name" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="username">
+      <label for="password">Password</label>
+      <input type="password" id="password" required minlength="6" autocomplete="new-password" placeholder="min. 6 characters">
+      <div class="err" id="err"></div>
+      <button type="submit" class="btn btn-primary" id="submitBtn">Create admin account</button>
+    </form>
+  </div>
+</div>
+<script src="shared.js"></script>
+<script>
+document.getElementById('setupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errEl = document.getElementById('err');
+  const btn = document.getElementById('submitBtn');
+  errEl.classList.remove('show');
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+
+  const payload = {
+    displayName: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value
+  };
+
+  try {
+    const bootstrapFn = functions.httpsCallable('bootstrapFirstAdmin');
+    await bootstrapFn(payload);
+    alert('Admin account created. Signing you in…');
+    await Auth.login(payload.email, payload.password);
+    location.href = 'admin.html';
+  } catch (err) {
+    errEl.textContent = err.message || 'Could not create admin account.';
+    errEl.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Create admin account';
+  }
+});
+</script>
+</body>
+</html>

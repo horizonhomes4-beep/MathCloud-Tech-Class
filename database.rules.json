@@ -1,0 +1,42 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "questions": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.role === 'admin'"
+    },
+
+    "settings": {
+      ".read": "auth != null",
+      ".write": "auth != null && auth.token.role === 'admin'"
+    },
+
+    "users": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || auth.token.role === 'admin')",
+        ".write": "auth != null && auth.token.role === 'admin'"
+      }
+    },
+
+    "students": {
+      "$studentUid": {
+        ".read": "auth != null && (auth.uid === $studentUid || auth.token.role === 'admin' || root.child('parents/'+auth.uid+'/studentUids/'+$studentUid).val() === true)",
+        ".write": "auth != null && (auth.token.role === 'admin' || auth.uid === $studentUid)"
+      }
+    },
+
+    "parents": {
+      "$parentUid": {
+        ".read": "auth != null && (auth.uid === $parentUid || auth.token.role === 'admin')",
+        ".write": "auth != null && auth.token.role === 'admin'"
+      }
+    },
+
+    "meta": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}

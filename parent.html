@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathCloud UCAT Coaching — Parent</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-functions-compat.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#/" class="brand">
+    <span class="mark">M</span>
+    <span>MathCloud <span class="sub">Parent view</span></span>
+  </a>
+  <nav class="nav" id="nav">
+    <span id="signedInAs" style="color:var(--ink-soft); font-size:12.5px;"></span>
+    <a href="#" id="logoutBtn">Sign out</a>
+  </nav>
+</div>
+<div id="setupBanner">
+  ⚠ Firebase isn't connected yet. Paste your project keys into <code>firebaseConfig</code> in shared.js, then reload.
+</div>
+
+<main id="app"></main>
+
+<footer>
+  MathCloud UCAT Coaching — practice scores are estimates and are not official UCAT results.
+</footer>
+
+<script src="shared.js"></script>
+<script src="parent-app.js"></script>
+</body>
+</html>

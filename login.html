@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — MathCloud UCAT Coaching</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-functions-compat.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="setupBanner">
+  ⚠ Firebase isn't connected yet. Paste your project keys into <code>firebaseConfig</code> in shared.js, then reload.
+</div>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="role-tag">MathCloud UCAT Coaching</span>
+    <h1>Sign in</h1>
+    <p style="color:var(--ink-soft); font-size:13.5px; margin:0;">Students, parents, and admins all sign in here — you'll be taken to the right page automatically.</p>
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="username">
+      <label for="password">Password</label>
+      <input type="password" id="password" required autocomplete="current-password">
+      <div class="err" id="err"></div>
+      <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+    <div class="role-links">
+      <span></span>
+      <a href="#" id="forgotLink">Forgot password?</a>
+    </div>
+    <p style="font-size:11.5px; color:var(--ink-soft); margin-top:20px; border-top:1px dashed var(--line); padding-top:12px;">
+      Don't have an account? Ask your tutor/admin — student and parent accounts are created by the MathCloud admin, not by self sign-up.
+    </p>
+  </div>
+</div>
+<script src="shared.js"></script>
+<script>
+(async function init() {
+  // If already signed in, skip straight to the right page.
+  const existing = await Auth.currentUser();
+  if (existing && existing.role) return routeByRole(existing.role);
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('err');
+    errEl.classList.remove('show');
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    try {
+      const user = await Auth.login(email, password);
+      if (!user.role) {
+        errEl.textContent = 'Your account has no role assigned yet. Ask your admin to check your account.';
+        errEl.classList.add('show');
+        await Auth.logout();
+        return;
+      }
+      routeByRole(user.role);
+    } catch (err) {
+      errEl.textContent = friendlyAuthError(err);
+      errEl.classList.add('show');
+    }
+  });
+
+  document.getElementById('forgotLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) { alert('Enter your email above first, then click "Forgot password?" again.'); return; }
+    try {
+      await auth.sendPasswordResetEmail(email);
+      alert('Password reset email sent to ' + email + '.');
+    } catch (err) {
+      alert(friendlyAuthError(err));
+    }
+  });
+})();
+
+function routeByRole(role) {
+  if (role === 'admin') location.href = 'admin.html';
+  else if (role === 'parent') location.href = 'parent.html';
+  else location.href = 'student.html';
+}
+
+function friendlyAuthError(err) {
+  const map = {
+    'auth/invalid-email': 'That email address looks invalid.',
+    'auth/user-disabled': 'This account has been disabled. Contact your admin.',
+    'auth/user-not-found': 'No account found with that email.',
+    'auth/wrong-password': 'Incorrect password.',
+    'auth/invalid-credential': 'Incorrect email or password.',
+    'auth/too-many-requests': 'Too many attempts — please wait a moment and try again.'
+  };
+  return map[err.code] || (err.message || 'Sign-in failed. Please try again.');
+}
+</script>
+</body>
+</html>
