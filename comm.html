@@ -1,0 +1,3821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0">
+
+<title>PC Skills Academy</title>
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:#f4f7fb;
+
+    color:#172033;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+.auth-screen{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #2563eb,
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #172554
+        );
+
+}
+
+.auth-card{
+
+    width:100%;
+
+    max-width:450px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:35px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.3);
+
+}
+
+.logo{
+
+    width:75px;
+
+    height:75px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:0 auto 15px;
+
+    font-size:27px;
+
+    font-weight:bold;
+
+}
+
+.auth-card h1{
+
+    text-align:center;
+
+}
+
+.auth-subtitle{
+
+    text-align:center;
+
+    color:#64748b;
+
+    margin:8px 0 25px;
+
+}
+
+.login-tabs{
+
+    display:flex;
+
+    gap:5px;
+
+    background:#f1f5f9;
+
+    padding:5px;
+
+    border-radius:10px;
+
+    margin-bottom:20px;
+
+}
+
+.login-tab{
+
+    flex:1;
+
+    border:none;
+
+    background:transparent;
+
+    padding:11px;
+
+    border-radius:7px;
+
+    font-weight:bold;
+
+    color:#64748b;
+
+}
+
+.login-tab.active{
+
+    background:white;
+
+    color:#2563eb;
+
+    box-shadow:
+        0 2px 6px rgba(0,0,0,.08);
+
+}
+
+.form-group{
+
+    margin-bottom:15px;
+
+}
+
+label{
+
+    display:block;
+
+    font-weight:bold;
+
+    font-size:14px;
+
+    margin-bottom:7px;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+input:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,.1);
+
+}
+
+.primary{
+
+    width:100%;
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:14px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    font-size:15px;
+
+}
+
+.secondary{
+
+    border:none;
+
+    background:#e8eefc;
+
+    color:#1d4ed8;
+
+    padding:11px 16px;
+
+    border-radius:9px;
+
+    font-weight:bold;
+
+}
+
+.danger{
+
+    border:none;
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+    padding:9px 13px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+}
+
+.message{
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border-radius:9px;
+
+    font-size:14px;
+
+    display:none;
+
+}
+
+.message.show{
+
+    display:block;
+
+}
+
+.message.error{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+.message.success{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app{
+
+    min-height:100vh;
+
+    display:flex;
+
+}
+
+.sidebar{
+
+    width:255px;
+
+    background:#0f172a;
+
+    color:white;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    bottom:0;
+
+    padding:25px 17px;
+
+    z-index:100;
+
+}
+
+.sidebar-title{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    margin-bottom:30px;
+
+}
+
+.nav{
+
+    width:100%;
+
+    background:transparent;
+
+    color:#cbd5e1;
+
+    border:none;
+
+    padding:13px;
+
+    text-align:left;
+
+    border-radius:9px;
+
+    margin-bottom:5px;
+
+}
+
+.nav:hover,
+.nav.active{
+
+    background:#1d4ed8;
+
+    color:white;
+
+}
+
+.main{
+
+    margin-left:255px;
+
+    width:calc(100% - 255px);
+
+    padding:25px;
+
+}
+
+.topbar{
+
+    background:white;
+
+    padding:17px 20px;
+
+    border-radius:15px;
+
+    margin-bottom:25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.mobile-menu{
+
+    display:none;
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:9px 12px;
+
+    border-radius:8px;
+
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin:20px 0;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.05);
+
+}
+
+.label{
+
+    color:#64748b;
+
+    font-size:13px;
+
+}
+
+.stat{
+
+    font-size:30px;
+
+    font-weight:bold;
+
+    margin-top:8px;
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+.progress{
+
+    height:10px;
+
+    background:#e5e7eb;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+.progress-bar{
+
+    height:100%;
+
+    background:#2563eb;
+
+    transition:.4s;
+
+}
+
+
+/* =====================================================
+   LESSONS
+===================================================== */
+
+.week-title{
+
+    margin:
+        30px 0
+        15px;
+
+}
+
+.lesson-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+.lesson-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    border:1px solid #e5e7eb;
+
+}
+
+.lesson-card.completed{
+
+    border:
+        2px solid #16a34a;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    margin-bottom:10px;
+
+}
+
+.badge.complete{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+
+/* =====================================================
+   LESSON VIEW
+===================================================== */
+
+.lesson-header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #1d4ed8,
+            #2563eb
+        );
+
+    color:white;
+
+    padding:30px;
+
+    border-radius:18px;
+
+    margin-bottom:18px;
+
+}
+
+.lesson-section{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    margin-bottom:15px;
+
+}
+
+.instruction{
+
+    background:#eff6ff;
+
+    border-left:
+        4px solid #2563eb;
+
+    padding:15px;
+
+    margin:
+        10px 0;
+
+    border-radius:5px;
+
+    line-height:1.6;
+
+}
+
+.task{
+
+    background:#fefce8;
+
+    border-left:
+        4px solid #eab308;
+
+    padding:18px;
+
+    border-radius:8px;
+
+    line-height:1.6;
+
+}
+
+.complete-btn{
+
+    border:none;
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:14px 20px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrap{
+
+    overflow-x:auto;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th,
+td{
+
+    padding:13px;
+
+    text-align:left;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+}
+
+th{
+
+    background:#f8fafc;
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+
+.achievement-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+}
+
+.achievement{
+
+    background:white;
+
+    padding:22px;
+
+    border-radius:15px;
+
+    text-align:center;
+
+}
+
+.icon{
+
+    font-size:40px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(15,23,42,.65);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:500;
+
+}
+
+.modal-box{
+
+    width:100%;
+
+    max-width:500px;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        transform:
+            translateX(-100%);
+
+        transition:.3s;
+
+    }
+
+    .sidebar.open{
+
+        transform:
+            translateX(0);
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:15px;
+
+    }
+
+    .mobile-menu{
+
+        display:block;
+
+    }
+
+    .cards{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+    .lesson-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .achievement-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:500px){
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .auth-card{
+
+        padding:25px 20px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen"
+     class="auth-screen">
+
+    <div class="auth-card">
+
+        <div class="logo">
+            PC
+        </div>
+
+        <h1>PC Skills Academy</h1>
+
+        <p class="auth-subtitle">
+            Practical Computer Skills Learning Portal
+        </p>
+
+
+        <div class="login-tabs">
+
+            <button
+                id="studentTab"
+                class="login-tab active"
+                onclick="setLoginType('student')">
+
+                Student
+
+            </button>
+
+            <button
+                id="adminTab"
+                class="login-tab"
+                onclick="setLoginType('admin')">
+
+                Administrator
+
+            </button>
+
+        </div>
+
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label>Email Address</label>
+
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="Enter email"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Enter password"
+                    required>
+
+            </div>
+
+
+            <button
+                class="primary"
+                type="submit"
+                id="loginBtn">
+
+                Student Login
+
+            </button>
+
+        </form>
+
+
+        <div id="loginMessage"
+             class="message">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div id="app"
+     class="app hidden">
+
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar"
+           class="sidebar">
+
+        <div class="sidebar-title">
+            💻 PC Skills Academy
+        </div>
+
+
+        <button
+            class="nav active"
+            onclick="showPage('dashboard')">
+
+            🏠 Dashboard
+
+        </button>
+
+
+        <button
+            class="nav"
+            onclick="showPage('lessons')">
+
+            📚 Lessons
+
+        </button>
+
+
+        <button
+            class="nav"
+            onclick="showPage('achievements')">
+
+            🏆 Achievements
+
+        </button>
+
+
+        <div id="adminNavigation"
+             class="hidden">
+
+            <button
+                class="nav"
+                onclick="showPage('admin')">
+
+                👨‍💼 Admin Monitor
+
+            </button>
+
+            <button
+                class="nav"
+                onclick="showPage('students')">
+
+                👨‍🎓 Students
+
+            </button>
+
+        </div>
+
+
+        <button
+            class="nav"
+            onclick="logout()">
+
+            🚪 Logout
+
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+
+        <div class="topbar">
+
+            <button
+                class="mobile-menu"
+                onclick="toggleSidebar()">
+
+                ☰
+
+            </button>
+
+
+            <div>
+
+                <strong id="welcome">
+                    Welcome
+                </strong>
+
+                <div class="label">
+                    Practical Computer Skills Programme
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboardPage">
+
+            <h2>Learning Dashboard</h2>
+
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="label">
+                        Progress
+                    </div>
+
+                    <div
+                        class="stat"
+                        id="dashProgress">
+
+                        0%
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Completed Lessons
+                    </div>
+
+                    <div
+                        class="stat"
+                        id="dashLessons">
+
+                        0
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Current Week
+                    </div>
+
+                    <div
+                        class="stat"
+                        id="dashWeek">
+
+                        1
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Achievements
+                    </div>
+
+                    <div
+                        class="stat"
+                        id="dashAchievements">
+
+                        0
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Programme Progress</h3>
+
+                <br>
+
+                <div class="progress">
+
+                    <div
+                        id="dashProgressBar"
+                        class="progress-bar"
+                        style="width:0%">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <p id="progressText">
+                    Start your first lesson.
+                </p>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <h3>Next Lesson</h3>
+
+                <br>
+
+                <div id="nextLesson">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LESSONS -->
+
+        <section
+            id="lessonsPage"
+            class="hidden">
+
+            <h2>8-Week Practical Programme</h2>
+
+            <p class="label">
+                Three practical lessons every week.
+            </p>
+
+            <div id="lessonContainer">
+            </div>
+
+        </section>
+
+
+        <!-- LESSON VIEW -->
+
+        <section
+            id="lessonPage"
+            class="hidden">
+
+            <button
+                class="secondary"
+                onclick="showPage('lessons')">
+
+                ← Back to Lessons
+
+            </button>
+
+            <br><br>
+
+            <div id="lessonContent">
+            </div>
+
+        </section>
+
+
+        <!-- ACHIEVEMENTS -->
+
+        <section
+            id="achievementsPage"
+            class="hidden">
+
+            <h2>My Achievements</h2>
+
+            <br>
+
+            <div
+                id="achievementContainer"
+                class="achievement-grid">
+            </div>
+
+        </section>
+
+
+        <!-- ADMIN DASHBOARD -->
+
+        <section
+            id="adminPage"
+            class="hidden">
+
+            <h2>Administrator Monitor</h2>
+
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="label">
+                        Total Students
+                    </div>
+
+                    <div
+                        id="totalStudents"
+                        class="stat">
+
+                        0
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Active Students
+                    </div>
+
+                    <div
+                        id="activeStudents"
+                        class="stat">
+
+                        0
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Completed
+                    </div>
+
+                    <div
+                        id="completedStudents"
+                        class="stat">
+
+                        0
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="label">
+                        Average Progress
+                    </div>
+
+                    <div
+                        id="averageProgress"
+                        class="stat">
+
+                        0%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Student Progress Overview</h3>
+
+                <br>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+
+                                <th>Email</th>
+
+                                <th>Progress</th>
+
+                                <th>Lessons</th>
+
+                                <th>Week</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody
+                            id="adminTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT MANAGEMENT -->
+
+        <section
+            id="studentsPage"
+            class="hidden">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:15px;
+                flex-wrap:wrap;
+            ">
+
+                <div>
+
+                    <h2>Student Management</h2>
+
+                    <p class="label">
+                        Create and manage student accounts.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    style="width:auto"
+                    onclick="openStudentModal()">
+
+                    + Create Student
+
+                </button>
+
+            </div>
+
+
+            <br>
+
+
+            <div class="card">
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+
+                                <th>Email</th>
+
+                                <th>Progress</th>
+
+                                <th>Lessons</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody
+                            id="studentsTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     CREATE STUDENT MODAL
+===================================================== -->
+
+<div
+    id="studentModal"
+    class="modal hidden">
+
+    <div class="modal-box">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+
+            <h2>Create Student</h2>
+
+            <button
+                class="danger"
+                onclick="closeStudentModal()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <br>
+
+
+        <form id="studentForm">
+
+            <div class="form-group">
+
+                <label>Student Full Name</label>
+
+                <input
+                    id="studentName"
+                    required
+                    placeholder="Student name">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Student Email</label>
+
+                <input
+                    id="studentEmail"
+                    type="email"
+                    required
+                    placeholder="student@example.com">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Temporary Password</label>
+
+                <input
+                    id="studentPassword"
+                    type="password"
+                    minlength="6"
+                    required
+                    placeholder="Create password">
+
+            </div>
+
+
+            <button
+                class="primary"
+                type="submit">
+
+                Create Student Account
+
+            </button>
+
+        </form>
+
+
+        <div
+            id="studentMessage"
+            class="message">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FIREBASE REALTIME DATABASE ONLY
+===================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+
+<script>
+
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCL3vOyJlD6CfpU43SRxKTPo_rDqoEgfc8",
+    authDomain: "comprehension-5b15d.firebaseapp.com",
+    databaseURL: "https://comprehension-5b15d-default-rtdb.firebaseio.com",
+    projectId: "comprehension-5b15d",
+    storageBucket: "comprehension-5b15d.firebasestorage.app",
+    messagingSenderId: "999712774012",
+    appId: "1:999712774012:web:a3df9b0f32f5cfb3f076f9"
+  };
+
+
+firebase.initializeApp(firebaseConfig);
+
+const db=
+    firebase.database();
+
+
+/* =====================================================
+   SESSION
+===================================================== */
+
+let session=null;
+
+let currentUser=null;
+
+let loginType="student";
+
+
+/* =====================================================
+   LESSON DATA
+===================================================== */
+
+const lessons={
+
+1:{
+title:"Computer Fundamentals",
+items:[
+
+{
+title:"Getting to Know Your Computer",
+objective:"Identify the main physical components of a computer.",
+steps:[
+"Look at the monitor. This is the screen where your computer displays information.",
+"Locate the keyboard. Use it to enter letters, numbers and commands.",
+"Locate the mouse or touchpad. Move it and observe the pointer.",
+"Locate the system unit if you are using a desktop computer.",
+"Look for USB ports and identify where external devices can be connected.",
+"Locate the computer power button.",
+"Identify the speakers or headphone connection.",
+"Write down the name and purpose of at least five components."
+],
+task:"Identify five computer components and explain what each one does."
+},
+
+{
+title:"Understanding the Windows Desktop",
+objective:"Learn to work comfortably with the Windows desktop.",
+steps:[
+"Turn on the computer and wait for Windows to finish loading.",
+"Look at the desktop and identify the icons.",
+"Locate the Windows Start button.",
+"Locate the taskbar.",
+"Open the Start menu.",
+"Search for a programme such as Notepad.",
+"Open Notepad.",
+"Minimise the programme.",
+"Restore it from the taskbar.",
+"Close the programme."
+],
+task:"Open, minimise, restore and close three different Windows applications."
+},
+
+{
+title:"Windows Settings",
+objective:"Find and understand common Windows settings.",
+steps:[
+"Click Start.",
+"Open Settings.",
+"Open System.",
+"Locate Display settings.",
+"Locate Sound settings.",
+"Locate Storage settings.",
+"Return to the main Settings screen.",
+"Open Personalisation.",
+"Find the background settings.",
+"Do not change security or advanced settings without permission."
+],
+task:"Locate Display, Sound, Storage and Personalisation settings."
+}
+
+]},
+
+2:{
+title:"Files and Folders",
+items:[
+
+{
+title:"Creating Folders",
+objective:"Create a logical folder structure.",
+steps:[
+"Open File Explorer.",
+"Click Documents.",
+"Right-click an empty area.",
+"Choose New.",
+"Choose Folder.",
+"Name the folder Computer Practice.",
+"Open the folder.",
+"Create three folders called Documents, Pictures and Projects."
+],
+task:"Create the complete Computer Practice folder structure."
+},
+
+{
+title:"Copying and Moving Files",
+objective:"Learn the difference between copying and moving.",
+steps:[
+"Open File Explorer.",
+"Find a practice file.",
+"Right-click the file.",
+"Choose Copy.",
+"Open your Computer Practice folder.",
+"Choose Paste.",
+"Return to the original file.",
+"Use Cut.",
+"Open another folder.",
+"Paste the file."
+],
+task:"Copy one file and move another file into appropriate folders."
+},
+
+{
+title:"Searching for Files",
+objective:"Find files quickly.",
+steps:[
+"Open File Explorer.",
+"Click the Search box.",
+"Type part of a filename.",
+"Press Enter.",
+"Review the results.",
+"Try searching for .pdf files.",
+"Open the correct file.",
+"Use the file location to identify where it is stored."
+],
+task:"Find three different files using Windows Search."
+}
+
+]},
+
+3:{
+title:"Microsoft Word",
+items:[
+
+{
+title:"Creating a Word Document",
+objective:"Create and save a basic Word document.",
+steps:[
+"Open Microsoft Word.",
+"Select Blank Document.",
+"Type a short paragraph about yourself.",
+"Click File.",
+"Choose Save As.",
+"Open your Computer Practice folder.",
+"Enter a meaningful filename.",
+"Click Save.",
+"Close Word.",
+"Open the document again."
+],
+task:"Create a one-page document titled My Computer Learning Journey."
+},
+
+{
+title:"Formatting Text",
+objective:"Use professional text formatting.",
+steps:[
+"Open your Word document.",
+"Select the title.",
+"Make it bold.",
+"Increase the font size.",
+"Centre the title.",
+"Select a paragraph.",
+"Change the font size.",
+"Try Bold, Italic and Underline.",
+"Try left, centre and right alignment.",
+"Save the document."
+],
+task:"Format your document with a professional title and readable paragraphs."
+},
+
+{
+title:"Professional Document",
+objective:"Create a professional formal document.",
+steps:[
+"Open Microsoft Word.",
+"Create a blank document.",
+"Type a formal application letter.",
+"Add the date.",
+"Add an appropriate heading.",
+"Write clear paragraphs.",
+"Use consistent formatting.",
+"Check spelling.",
+"Save the document.",
+"Close and reopen it."
+],
+task:"Create a professional one-page application letter."
+}
+
+]},
+
+4:{
+title:"Word Documents",
+items:[
+
+{
+title:"Creating Tables",
+objective:"Create and format a table.",
+steps:[
+"Open Word.",
+"Click Insert.",
+"Choose Table.",
+"Select rows and columns.",
+"Enter information.",
+"Click inside the table.",
+"Explore the table design options.",
+"Adjust column widths.",
+"Save the document."
+],
+task:"Create a student record table containing five columns."
+},
+
+{
+title:"Inserting Images",
+objective:"Insert and position pictures.",
+steps:[
+"Open Word.",
+"Click Insert.",
+"Choose Pictures.",
+"Select a suitable image.",
+"Insert the image.",
+"Click the image.",
+"Resize it.",
+"Open the text wrapping options.",
+"Position the image beside your text."
+],
+task:"Create a one-page document containing text and an appropriate image."
+},
+
+{
+title:"PDF and Printing",
+objective:"Convert a Word document into PDF.",
+steps:[
+"Open a completed Word document.",
+"Click File.",
+"Choose Save As or Export.",
+"Select PDF.",
+"Save the PDF in your practice folder.",
+"Open the PDF.",
+"Review the document.",
+"Click Print to inspect the print options.",
+"Do not print unless instructed."
+],
+task:"Create a PDF version of one of your Word documents."
+}
+
+]},
+
+5:{
+title:"Internet Skills",
+items:[
+
+{
+title:"Using a Web Browser",
+objective:"Navigate the internet confidently.",
+steps:[
+"Open Chrome, Edge or another browser.",
+"Identify the address bar.",
+"Type a website address.",
+"Press Enter.",
+"Open a new tab.",
+"Switch between tabs.",
+"Close a tab.",
+"Use the Back button.",
+"Use the Forward button."
+],
+task:"Open three educational websites in separate browser tabs."
+},
+
+{
+title:"Effective Web Searching",
+objective:"Find useful and reliable information online.",
+steps:[
+"Open a search engine.",
+"Enter a specific question.",
+"Read the search results.",
+"Compare information from multiple websites.",
+"Check the website address.",
+"Look for trustworthy sources.",
+"Do not download suspicious files.",
+"Do not enter personal information on unknown websites."
+],
+task:"Research one computer topic and record three useful sources."
+},
+
+{
+title:"Email Basics",
+objective:"Understand the basic functions of email.",
+steps:[
+"Open your email service.",
+"Sign in.",
+"Locate Inbox.",
+"Locate Sent.",
+"Locate Drafts.",
+"Click Compose.",
+"Enter the recipient.",
+"Enter a meaningful subject.",
+"Write a professional message.",
+"Review the message before sending."
+],
+task:"Compose a professional email to your computer-skills instructor."
+}
+
+]},
+
+6:{
+title:"Communication and Online Safety",
+items:[
+
+{
+title:"Email Attachments",
+objective:"Attach files correctly.",
+steps:[
+"Open your email.",
+"Click Compose.",
+"Enter the recipient.",
+"Enter a subject.",
+"Click the attachment icon.",
+"Select your practice document.",
+"Wait until uploading finishes.",
+"Check the filename.",
+"Send the message only when you are sure the recipient is correct."
+],
+task:"Send a practice document as an email attachment."
+},
+
+{
+title:"Cloud Storage",
+objective:"Understand online file storage.",
+steps:[
+"Open your approved cloud-storage service.",
+"Create a new folder.",
+"Upload a practice file.",
+"Wait for uploading to finish.",
+"Open the uploaded file.",
+"Download it again.",
+"Compare it with the original."
+],
+task:"Upload a document and demonstrate that you can retrieve it."
+},
+
+{
+title:"Computer Security",
+objective:"Develop safe computer habits.",
+steps:[
+"Use strong passwords.",
+"Never share your password.",
+"Avoid unknown attachments.",
+"Do not install unknown software.",
+"Check website addresses carefully.",
+"Keep Windows updated.",
+"Use reputable security software.",
+"Lock the computer when leaving it."
+],
+task:"Create your own ten-point computer safety checklist."
+}
+
+]},
+
+7:{
+title:"Microsoft Excel",
+items:[
+
+{
+title:"Excel Basics",
+objective:"Understand workbooks, worksheets, rows and columns.",
+steps:[
+"Open Microsoft Excel.",
+"Create a blank workbook.",
+"Identify the columns.",
+"Identify the rows.",
+"Click a cell.",
+"Enter a name.",
+"Enter a number in another cell.",
+"Move between cells.",
+"Save the workbook."
+],
+task:"Create a simple student record containing names and scores."
+},
+
+{
+title:"Excel Formulas",
+objective:"Perform basic calculations.",
+steps:[
+"Enter five numbers into cells A1 to A5.",
+"Click A6.",
+"Type =SUM(A1:A5).",
+"Press Enter.",
+"Click another cell.",
+"Type =AVERAGE(A1:A5).",
+"Press Enter.",
+"Change one score.",
+"Observe the formula result."
+],
+task:"Calculate the total and average of five student scores."
+},
+
+{
+title:"Excel Tables",
+objective:"Organise and filter data.",
+steps:[
+"Create column headings.",
+"Enter several records.",
+"Select your data.",
+"Choose Format as Table.",
+"Apply a table style.",
+"Sort the records.",
+"Use the filter.",
+"Save the workbook."
+],
+task:"Create a student results table with names, subjects and scores."
+}
+
+]},
+
+8:{
+title:"PowerPoint and Final Project",
+items:[
+
+{
+title:"PowerPoint Basics",
+objective:"Create a simple presentation.",
+steps:[
+"Open PowerPoint.",
+"Create a blank presentation.",
+"Choose a suitable title layout.",
+"Enter a presentation title.",
+"Add another slide.",
+"Enter short points.",
+"Insert an image.",
+"Add more slides.",
+"Save the presentation."
+],
+task:"Create a five-slide presentation titled What I Have Learned About Computers."
+},
+
+{
+title:"Professional Presentation",
+objective:"Improve presentation design.",
+steps:[
+"Use short points rather than large paragraphs.",
+"Use readable font sizes.",
+"Use consistent fonts.",
+"Use suitable images.",
+"Check spelling.",
+"Review the slide order.",
+"Run the slideshow.",
+"Practise explaining each slide."
+],
+task:"Complete your five-slide presentation and practise presenting it."
+},
+
+{
+title:"Final Practical Computer Project",
+objective:"Demonstrate the skills learned during the eight weeks.",
+steps:[
+"Create a folder called Final Computer Project.",
+"Create a Word document.",
+"Create an Excel spreadsheet.",
+"Create a PowerPoint presentation.",
+"Save all three files in the project folder.",
+"Convert your Word document to PDF.",
+"Review every file.",
+"Organise the folder professionally.",
+"Check filenames.",
+"Prepare the project for submission."
+],
+task:"Complete and demonstrate your final practical computer project."
+}
+
+]}
+
+};
+
+
+/* =====================================================
+   PASSWORD HASH
+===================================================== */
+
+async function hashPassword(password){
+
+    const data=
+        new TextEncoder()
+        .encode(password);
+
+    const hash=
+        await crypto.subtle.digest(
+            "SHA-256",
+            data
+        );
+
+    return Array.from(
+        new Uint8Array(hash)
+    )
+    .map(
+        b=>b.toString(16).padStart(2,"0")
+    )
+    .join("");
+
+}
+
+
+/* =====================================================
+   LOGIN TYPE
+===================================================== */
+
+function setLoginType(type){
+
+    loginType=type;
+
+
+    document
+    .getElementById("studentTab")
+    .classList.toggle(
+        "active",
+        type==="student"
+    );
+
+
+    document
+    .getElementById("adminTab")
+    .classList.toggle(
+        "active",
+        type==="admin"
+    );
+
+
+    document
+    .getElementById("loginBtn")
+    .textContent=
+        type==="admin"
+        ? "Administrator Login"
+        : "Student Login";
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showLoginMessage(text,type){
+
+    const box=
+        document.getElementById(
+            "loginMessage"
+        );
+
+    box.textContent=text;
+
+    box.className=
+        "message show "+type;
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+document
+.getElementById("loginForm")
+.addEventListener(
+"submit",
+async function(e){
+
+    e.preventDefault();
+
+
+    const email=
+        document
+        .getElementById("loginEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password=
+        document
+        .getElementById("loginPassword")
+        .value;
+
+
+    const button=
+        document
+        .getElementById("loginBtn");
+
+
+    button.disabled=true;
+
+    button.textContent="Checking...";
+
+
+    try{
+
+        const snapshot=
+            await db
+            .ref("users")
+            .once("value");
+
+
+        const users=
+            snapshot.val()||{};
+
+
+        const passwordHash=
+            await hashPassword(password);
+
+
+        let found=null;
+
+
+        Object.values(users).forEach(user=>{
+
+            if(
+                user.email===email &&
+                user.passwordHash===passwordHash &&
+                user.status!=="disabled"
+            ){
+
+                found=user;
+
+            }
+
+        });
+
+
+        if(!found){
+
+            throw new Error(
+                "Incorrect email or password."
+            );
+
+        }
+
+
+        if(
+            found.role!==loginType
+        ){
+
+            throw new Error(
+                "This account is not a "+
+                loginType+
+                " account."
+            );
+
+        }
+
+
+        session={
+
+            uid:found.uid,
+
+            role:found.role,
+
+            name:found.name,
+
+            email:found.email
+
+        };
+
+
+        localStorage.setItem(
+            "pcSkillsSession",
+            JSON.stringify(session)
+        );
+
+
+        currentUser=found;
+
+
+        /*
+         * Record login activity.
+         */
+
+        await db
+        .ref(
+            "users/"+found.uid
+        )
+        .update({
+
+            lastLogin:
+                firebase.database
+                .ServerValue
+                .TIMESTAMP
+
+        });
+
+
+        openApplication();
+
+
+    }catch(error){
+
+        showLoginMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+
+    button.disabled=false;
+
+    button.textContent=
+        loginType==="admin"
+        ? "Administrator Login"
+        : "Student Login";
+
+});
+
+
+/* =====================================================
+   RESTORE SESSION
+===================================================== */
+
+async function restoreSession(){
+
+    const saved=
+        localStorage.getItem(
+            "pcSkillsSession"
+        );
+
+
+    if(!saved)return;
+
+
+    try{
+
+        session=
+            JSON.parse(saved);
+
+
+        const snapshot=
+            await db
+            .ref(
+                "users/"+session.uid
+            )
+            .once("value");
+
+
+        const user=
+            snapshot.val();
+
+
+        if(
+            !user ||
+            user.status==="disabled"
+        ){
+
+            logout();
+
+            return;
+
+        }
+
+
+        currentUser=user;
+
+        openApplication();
+
+
+    }catch(error){
+
+        logout();
+
+    }
+
+}
+
+
+restoreSession();
+
+
+/* =====================================================
+   OPEN APP
+===================================================== */
+
+function openApplication(){
+
+    document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+
+    document
+    .getElementById("welcome")
+    .textContent=
+        "Welcome, "+currentUser.name;
+
+
+    if(currentUser.role==="admin"){
+
+        document
+        .getElementById("adminNavigation")
+        .classList.remove("hidden");
+
+    }
+
+
+    updateDashboard();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    localStorage.removeItem(
+        "pcSkillsSession"
+    );
+
+    session=null;
+
+    currentUser=null;
+
+    location.reload();
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+function showPage(page){
+
+    const pages=[
+        "dashboardPage",
+        "lessonsPage",
+        "lessonPage",
+        "achievementsPage",
+        "adminPage",
+        "studentsPage"
+    ];
+
+
+    pages.forEach(id=>{
+
+        document
+        .getElementById(id)
+        .classList.add("hidden");
+
+    });
+
+
+    const target=
+        document.getElementById(
+            page+"Page"
+        );
+
+
+    if(target){
+
+        target.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if(page==="lessons")
+        renderLessons();
+
+
+    if(page==="achievements")
+        renderAchievements();
+
+
+    if(page==="admin")
+        loadAdmin();
+
+
+    if(page==="students")
+        loadStudents();
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+async function updateDashboard(){
+
+    if(!currentUser)return;
+
+
+    const snapshot=
+        await db
+        .ref(
+            "users/"+currentUser.uid
+        )
+        .once("value");
+
+
+    currentUser=snapshot.val();
+
+
+    if(currentUser.role==="admin"){
+
+        document
+        .getElementById(
+            "dashProgress"
+        )
+        .textContent="Admin";
+
+        document
+        .getElementById(
+            "dashLessons"
+        )
+        .textContent="-";
+
+        document
+        .getElementById(
+            "dashWeek"
+        )
+        .textContent="-";
+
+        document
+        .getElementById(
+            "dashProgressBar"
+        )
+        .style.width="0%";
+
+        document
+        .getElementById(
+            "progressText"
+        )
+        .textContent=
+            "Use Admin Monitor to manage students.";
+
+        document
+        .getElementById(
+            "nextLesson"
+        )
+        .innerHTML=
+            "<strong>Administrator account</strong>";
+
+
+        const achievements=
+            await db
+            .ref(
+                "achievements/"
+                +currentUser.uid
+            )
+            .once("value");
+
+
+        document
+        .getElementById(
+            "dashAchievements"
+        )
+        .textContent=
+            Object.keys(
+                achievements.val()||{}
+            ).length;
+
+        return;
+
+    }
+
+
+    const progress=
+        currentUser.progress||0;
+
+    const completed=
+        currentUser.completedLessons||0;
+
+
+    document
+    .getElementById("dashProgress")
+    .textContent=
+        progress+"%";
+
+
+    document
+    .getElementById("dashLessons")
+    .textContent=
+        completed+"/24";
+
+
+    document
+    .getElementById("dashWeek")
+    .textContent=
+        currentUser.currentWeek||1;
+
+
+    document
+    .getElementById("dashProgressBar")
+    .style.width=
+        progress+"%";
+
+
+    document
+    .getElementById("progressText")
+    .textContent=
+        completed+
+        " of 24 lessons completed.";
+
+
+    const achievements=
+        await db
+        .ref(
+            "achievements/"
+            +currentUser.uid
+        )
+        .once("value");
+
+
+    document
+    .getElementById(
+        "dashAchievements"
+    )
+    .textContent=
+        Object.keys(
+            achievements.val()||{}
+        ).length;
+
+
+    findNextLesson();
+
+}
+
+
+/* =====================================================
+   FIND NEXT LESSON
+===================================================== */
+
+function findNextLesson(){
+
+    const completed=
+        currentUser.completedLessonsList||{};
+
+
+    for(
+        let number=1;
+        number<=24;
+        number++
+    ){
+
+        if(!completed[number]){
+
+            const week=
+                Math.ceil(number/3);
+
+            const index=
+                (number-1)%3;
+
+            const lesson=
+                lessons[week].items[index];
+
+
+            document
+            .getElementById("nextLesson")
+            .innerHTML=`
+
+                <h3>${lesson.title}</h3>
+
+                <br>
+
+                <p>${lesson.objective}</p>
+
+                <br>
+
+                <button
+                    class="secondary"
+                    onclick="openLesson(
+                        ${week},
+                        ${index},
+                        ${number}
+                    )">
+
+                    Continue Lesson
+
+                </button>
+
+            `;
+
+            return;
+
+        }
+
+    }
+
+
+    document
+    .getElementById("nextLesson")
+    .innerHTML=
+        "<h3>🎉 Programme Complete!</h3>";
+
+}
+
+
+/* =====================================================
+   RENDER LESSONS
+===================================================== */
+
+function renderLessons(){
+
+    const container=
+        document
+        .getElementById(
+            "lessonContainer"
+        );
+
+
+    container.innerHTML="";
+
+
+    for(
+        let week=1;
+        week<=8;
+        week++
+    ){
+
+        const heading=
+            document.createElement("h3");
+
+
+        heading.className=
+            "week-title";
+
+
+        heading.textContent=
+            "Week "+week+
+            ": "+
+            lessons[week].title;
+
+
+        container.appendChild(
+            heading
+        );
+
+
+        const grid=
+            document.createElement(
+                "div"
+            );
+
+
+        grid.className=
+            "lesson-grid";
+
+
+        lessons[week].items
+        .forEach((lesson,index)=>{
+
+            const number=
+                (week-1)*3+
+                index+
+                1;
+
+
+            const completed=
+                currentUser
+                .completedLessonsList &&
+                currentUser
+                .completedLessonsList[
+                    number
+                ];
+
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className=
+                "lesson-card "+
+                (completed
+                    ? "completed"
+                    : "");
+
+
+            card.innerHTML=`
+
+                <span class="badge ${
+                    completed
+                    ? "complete"
+                    : ""
+                }">
+
+                    ${
+                        completed
+                        ? "✓ Completed"
+                        : "Lesson "+number
+                    }
+
+                </span>
+
+                <h3>
+                    ${lesson.title}
+                </h3>
+
+                <br>
+
+                <p>
+                    ${lesson.objective}
+                </p>
+
+                <br>
+
+                <button
+                    class="secondary"
+                    onclick="openLesson(
+                        ${week},
+                        ${index},
+                        ${number}
+                    )">
+
+                    ${
+                        completed
+                        ? "Review"
+                        : "Start Lesson"
+                    }
+
+                </button>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        });
+
+
+        container.appendChild(grid);
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN LESSON
+===================================================== */
+
+function openLesson(
+    week,
+    index,
+    number
+){
+
+    const lesson=
+        lessons[week].items[index];
+
+
+    const completed=
+        currentUser.completedLessonsList &&
+        currentUser.completedLessonsList[
+            number
+        ];
+
+
+    let steps="";
+
+
+    lesson.steps.forEach(
+        (step,i)=>{
+
+            steps+=`
+
+                <div class="instruction">
+
+                    <strong>
+                        Step ${i+1}
+                    </strong>
+
+                    <br>
+
+                    ${step}
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "lessonContent"
+    )
+    .innerHTML=`
+
+        <div class="lesson-header">
+
+            <small>
+                WEEK ${week}
+                • LESSON ${number}
+            </small>
+
+            <h1>
+                ${lesson.title}
+            </h1>
+
+            <p>
+                ${lesson.objective}
+            </p>
+
+        </div>
+
+
+        <div class="lesson-section">
+
+            <h3>
+                🎯 Learning Objective
+            </h3>
+
+            <br>
+
+            <p>
+                ${lesson.objective}
+            </p>
+
+        </div>
+
+
+        <div class="lesson-section">
+
+            <h3>
+                💻 Step-by-Step Instructions
+            </h3>
+
+            <br>
+
+            ${steps}
+
+        </div>
+
+
+        <div class="lesson-section">
+
+            <h3>
+                📝 Practical Task
+            </h3>
+
+            <br>
+
+            <div class="task">
+
+                ${lesson.task}
+
+            </div>
+
+        </div>
+
+
+        <div class="lesson-section">
+
+            <h3>
+                ✅ Completion
+            </h3>
+
+            <br>
+
+            ${
+                completed
+                ?
+                `
+                <button
+                    class="complete-btn"
+                    disabled>
+
+                    ✓ Completed
+
+                </button>
+                `
+                :
+                `
+                <button
+                    class="complete-btn"
+                    onclick="completeLesson(
+                        ${week},
+                        ${number}
+                    )">
+
+                    Mark Lesson Complete
+
+                </button>
+                `
+            }
+
+        </div>
+
+    `;
+
+
+    showPage("lesson");
+
+}
+
+
+/* =====================================================
+   COMPLETE LESSON
+===================================================== */
+
+async function completeLesson(
+    week,
+    number
+){
+
+    if(currentUser.role!=="student")
+        return;
+
+
+    const completed=
+        currentUser.completedLessonsList||{};
+
+
+    if(completed[number])
+        return;
+
+
+    completed[number]=true;
+
+
+    const count=
+        Object.keys(completed).length;
+
+
+    const progress=
+        Math.round(
+            (count/24)*100
+        );
+
+
+    const currentWeek=
+        Math.min(
+            8,
+            Math.floor(count/3)+1
+        );
+
+
+    await db
+    .ref(
+        "users/"+currentUser.uid
+    )
+    .update({
+
+        completedLessons:count,
+
+        progress:progress,
+
+        currentWeek:currentWeek,
+
+        completedLessonsList:
+            completed,
+
+        lastActivity:
+            firebase.database
+            .ServerValue
+            .TIMESTAMP
+
+    });
+
+
+    await db
+    .ref(
+        "progress/"
+        +currentUser.uid+
+        "/lesson"+number
+    )
+    .set({
+
+        lesson:number,
+
+        week:week,
+
+        completed:true,
+
+        completedAt:
+            firebase.database
+            .ServerValue
+            .TIMESTAMP
+
+    });
+
+
+    await createAchievements(
+        count
+    );
+
+
+    const snapshot=
+        await db
+        .ref(
+            "users/"
+            +currentUser.uid
+        )
+        .once("value");
+
+
+    currentUser=
+        snapshot.val();
+
+
+    alert(
+        "Excellent! Lesson "+number+
+        " has been completed."
+    );
+
+
+    renderLessons();
+
+    updateDashboard();
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENTS
+===================================================== */
+
+async function createAchievements(
+    count
+){
+
+    const ref=
+        db.ref(
+            "achievements/"
+            +currentUser.uid
+        );
+
+
+    const achievements=[];
+
+
+    if(count>=1){
+
+        achievements.push([
+            "firstLesson",
+            "🌱",
+            "First Step",
+            "Completed your first lesson."
+        ]);
+
+    }
+
+
+    if(count>=3){
+
+        achievements.push([
+            "week1",
+            "🥉",
+            "Week One Champion",
+            "Completed Week 1."
+        ]);
+
+    }
+
+
+    if(count>=6){
+
+        achievements.push([
+            "week2",
+            "🥈",
+            "Building Skills",
+            "Completed two weeks."
+        ]);
+
+    }
+
+
+    if(count>=12){
+
+        achievements.push([
+            "halfway",
+            "🏅",
+            "Halfway Hero",
+            "Completed 12 lessons."
+        ]);
+
+    }
+
+
+    if(count>=24){
+
+        achievements.push([
+            "graduate",
+            "🏆",
+            "Computer Skills Graduate",
+            "Completed all 24 lessons."
+        ]);
+
+    }
+
+
+    for(
+        const a of achievements
+    ){
+
+        await ref
+        .child(a[0])
+        .set({
+
+            title:a[2],
+
+            description:a[3],
+
+            icon:a[1],
+
+            earnedAt:
+                firebase.database
+                .ServerValue
+                .TIMESTAMP
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   ACHIEVEMENTS DISPLAY
+===================================================== */
+
+async function renderAchievements(){
+
+    const container=
+        document.getElementById(
+            "achievementContainer"
+        );
+
+
+    container.innerHTML="";
+
+
+    const snapshot=
+        await db
+        .ref(
+            "achievements/"
+            +currentUser.uid
+        )
+        .once("value");
+
+
+    const earned=
+        snapshot.val()||{};
+
+
+    const list=[
+
+        [
+            "firstLesson",
+            "🌱",
+            "First Step",
+            "Complete your first lesson."
+        ],
+
+        [
+            "week1",
+            "🥉",
+            "Week One Champion",
+            "Complete Week 1."
+        ],
+
+        [
+            "week2",
+            "🥈",
+            "Building Skills",
+            "Complete two weeks."
+        ],
+
+        [
+            "halfway",
+            "🏅",
+            "Halfway Hero",
+            "Complete 12 lessons."
+        ],
+
+        [
+            "graduate",
+            "🏆",
+            "Computer Skills Graduate",
+            "Complete all 24 lessons."
+        ]
+
+    ];
+
+
+    list.forEach(a=>{
+
+        const div=
+            document.createElement(
+                "div"
+            );
+
+
+        div.className=
+            "achievement";
+
+
+        const isEarned=
+            !!earned[a[0]];
+
+
+        div.innerHTML=`
+
+            <div class="icon">
+                ${isEarned ? a[1] : "🔒"}
+            </div>
+
+            <h3>
+                ${a[2]}
+            </h3>
+
+            <br>
+
+            <p>
+                ${a[3]}
+            </p>
+
+            <br>
+
+            <span class="badge ${
+                isEarned
+                ? "complete"
+                : ""
+            }">
+
+                ${
+                    isEarned
+                    ? "Earned"
+                    : "Locked"
+                }
+
+            </span>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+async function loadAdmin(){
+
+    if(currentUser.role!=="admin")
+        return;
+
+
+    const snapshot=
+        await db
+        .ref("users")
+        .once("value");
+
+
+    const data=
+        snapshot.val()||{};
+
+
+    const students=
+        Object.values(data)
+        .filter(
+            u=>u.role==="student"
+        );
+
+
+    document
+    .getElementById(
+        "totalStudents"
+    )
+    .textContent=
+        students.length;
+
+
+    const active=
+        students.filter(
+            s=>(s.progress||0)>0
+        ).length;
+
+
+    document
+    .getElementById(
+        "activeStudents"
+    )
+    .textContent=
+        active;
+
+
+    const completed=
+        students.filter(
+            s=>(s.progress||0)>=100
+        ).length;
+
+
+    document
+    .getElementById(
+        "completedStudents"
+    )
+    .textContent=
+        completed;
+
+
+    let average=0;
+
+
+    if(students.length){
+
+        average=
+            Math.round(
+                students.reduce(
+                    (sum,s)=>
+                        sum+(s.progress||0),
+                    0
+                )
+                /students.length
+            );
+
+    }
+
+
+    document
+    .getElementById(
+        "averageProgress"
+    )
+    .textContent=
+        average+"%";
+
+
+    const table=
+        document.getElementById(
+            "adminTable"
+        );
+
+
+    table.innerHTML="";
+
+
+    students
+    .sort(
+        (a,b)=>
+            (a.name||"")
+            .localeCompare(
+                b.name||""
+            )
+    )
+    .forEach(student=>{
+
+        const tr=
+            document.createElement(
+                "tr"
+            );
+
+
+        tr.innerHTML=`
+
+            <td>
+                ${student.name||"-"}
+            </td>
+
+            <td>
+                ${student.email||"-"}
+            </td>
+
+            <td>
+
+                ${student.progress||0}%
+
+                <div
+                    class="progress">
+
+                    <div
+                        class="progress-bar"
+                        style="
+                        width:${student.progress||0}%;
+                        ">
+                    </div>
+
+                </div>
+
+            </td>
+
+            <td>
+                ${student.completedLessons||0}/24
+            </td>
+
+            <td>
+                Week ${student.currentWeek||1}
+            </td>
+
+        `;
+
+
+        table.appendChild(tr);
+
+    });
+
+}
+
+
+/* =====================================================
+   CREATE STUDENT
+===================================================== */
+
+function openStudentModal(){
+
+    document
+    .getElementById(
+        "studentModal"
+    )
+    .classList.remove("hidden");
+
+}
+
+
+function closeStudentModal(){
+
+    document
+    .getElementById(
+        "studentModal"
+    )
+    .classList.add("hidden");
+
+}
+
+
+document
+.getElementById("studentForm")
+.addEventListener(
+"submit",
+async function(e){
+
+    e.preventDefault();
+
+
+    if(currentUser.role!=="admin"){
+
+        alert(
+            "Administrator access required."
+        );
+
+        return;
+
+    }
+
+
+    const name=
+        document
+        .getElementById(
+            "studentName"
+        )
+        .value.trim();
+
+
+    const email=
+        document
+        .getElementById(
+            "studentEmail"
+        )
+        .value.trim()
+        .toLowerCase();
+
+
+    const password=
+        document
+        .getElementById(
+            "studentPassword"
+        )
+        .value;
+
+
+    const message=
+        document.getElementById(
+            "studentMessage"
+        );
+
+
+    try{
+
+        /*
+         * Check duplicate email.
+         */
+
+        const snapshot=
+            await db
+            .ref("users")
+            .once("value");
+
+
+        const users=
+            snapshot.val()||{};
+
+
+        const exists=
+            Object.values(users)
+            .some(
+                u=>u.email===email
+            );
+
+
+        if(exists){
+
+            throw new Error(
+                "A user with this email already exists."
+            );
+
+        }
+
+
+        /*
+         * Create unique ID.
+         */
+
+        const uid=
+            db.ref("users").push().key;
+
+
+        const passwordHash=
+            await hashPassword(
+                password
+            );
+
+
+        await db
+        .ref(
+            "users/"+uid
+        )
+        .set({
+
+            uid:uid,
+
+            name:name,
+
+            email:email,
+
+            passwordHash:
+                passwordHash,
+
+            role:"student",
+
+            status:"active",
+
+            joinedAt:
+                firebase.database
+                .ServerValue
+                .TIMESTAMP,
+
+            currentWeek:1,
+
+            progress:0,
+
+            completedLessons:0,
+
+            completedLessonsList:{},
+
+            lastActivity:
+                firebase.database
+                .ServerValue
+                .TIMESTAMP
+
+        });
+
+
+        message.textContent=
+            "Student account created successfully.";
+
+        message.className=
+            "message show success";
+
+
+        document
+        .getElementById(
+            "studentForm"
+        )
+        .reset();
+
+
+        loadStudents();
+
+
+        setTimeout(
+            closeStudentModal,
+            1200
+        );
+
+
+    }catch(error){
+
+        message.textContent=
+            error.message;
+
+        message.className=
+            "message show error";
+
+    }
+
+});
+
+
+/* =====================================================
+   STUDENT LIST
+===================================================== */
+
+async function loadStudents(){
+
+    if(currentUser.role!=="admin")
+        return;
+
+
+    const snapshot=
+        await db
+        .ref("users")
+        .once("value");
+
+
+    const users=
+        snapshot.val()||{};
+
+
+    const students=
+        Object.values(users)
+        .filter(
+            u=>u.role==="student"
+        );
+
+
+    const table=
+        document.getElementById(
+            "studentsTable"
+        );
+
+
+    table.innerHTML="";
+
+
+    students
+    .sort(
+        (a,b)=>
+            a.name.localeCompare(
+                b.name
+            )
+    )
+    .forEach(student=>{
+
+        const tr=
+            document.createElement(
+                "tr"
+            );
+
+
+        tr.innerHTML=`
+
+            <td>
+                ${student.name}
+            </td>
+
+            <td>
+                ${student.email}
+            </td>
+
+            <td>
+                ${student.progress||0}%
+            </td>
+
+            <td>
+                ${student.completedLessons||0}/24
+            </td>
+
+            <td>
+
+                <button
+                    class="danger"
+                    onclick="disableStudent(
+                        '${student.uid}'
+                    )">
+
+                    Disable
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(tr);
+
+    });
+
+}
+
+
+/* =====================================================
+   DISABLE STUDENT
+===================================================== */
+
+async function disableStudent(uid){
+
+    if(
+        !confirm(
+            "Disable this student account?"
+        )
+    )
+        return;
+
+
+    await db
+    .ref(
+        "users/"+uid
+    )
+    .update({
+
+        status:"disabled"
+
+    });
+
+
+    loadStudents();
+
+    loadAdmin();
+
+}
+
+
+/* =====================================================
+   MOBILE SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+    document
+    .getElementById(
+        "sidebar"
+    )
+    .classList.toggle(
+        "open"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
