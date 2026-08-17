@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PC Skills Academy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f7fb;color:#172033}
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#0f172a,#2563eb)}
+.auth-card{width:min(460px,100%);background:#fff;border-radius:24px;padding:35px;box-shadow:0 25px 70px #0004}
+.logo{width:70px;height:70px;border-radius:20px;display:grid;place-items:center;background:#2563eb;color:#fff;font-size:26px;font-weight:900;margin:auto auto 18px}
+.auth-card h1{text-align:center}.auth-subtitle{text-align:center;color:#64748b;margin:8px 0 24px}
+.login-tabs{display:flex;background:#eef2ff;padding:5px;border-radius:12px;margin-bottom:20px}
+.login-tab{flex:1;padding:11px;border-radius:9px;background:transparent;font-weight:700}
+.login-tab.active{background:#2563eb;color:white}
+.form-group{margin:15px 0}.form-group label{display:block;font-weight:700;margin-bottom:7px}
+input,textarea{width:100%;border:1px solid #dbe2ea;border-radius:11px;padding:13px;background:#fff;outline:none}
+input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px #2563eb18}
+textarea{min-height:150px;resize:vertical}
+.primary,.secondary,.complete-btn{padding:12px 18px;border-radius:10px;font-weight:800}
+.primary{background:#2563eb;color:#fff}.secondary{background:#e8eef8;color:#1e3a8a}.complete-btn{background:#16a34a;color:#fff}.full{width:100%}
+.message{margin-top:14px;padding:10px;border-radius:10px;display:none}.message.show{display:block}.message.error{background:#fee2e2;color:#991b1b}.message.success{background:#dcfce7;color:#166534}
+.app{min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:#0f172a;color:#fff;padding:20px;z-index:20}.sidebar-title{font-size:20px;font-weight:900;margin:8px 0 25px}
+.nav{width:100%;text-align:left;padding:12px 14px;border-radius:10px;background:transparent;color:#cbd5e1;margin:4px 0}.nav:hover,.nav.active{background:#2563eb;color:#fff}
+.main{margin-left:245px;padding:20px;min-height:100vh}.topbar{background:#fff;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:15px;margin-bottom:20px}.mobile-menu{display:none;background:#2563eb;color:#fff;padding:10px;border-radius:9px}
+.page{max-width:1250px;margin:auto}.hero{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border-radius:20px;padding:28px;margin-bottom:20px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 5px 20px #1720330a}.label{font-size:13px;color:#64748b}.stat{font-size:30px;font-weight:900;margin-top:6px}.progress{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden}.progress-bar{height:100%;background:#2563eb;border-radius:20px;transition:.4s}
+.week-title{margin:25px 0 12px}.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.lesson-card{background:#fff;padding:20px;border-radius:16px;border:1px solid #e8edf3;display:flex;flex-direction:column;align-items:flex-start}.lesson-card p{color:#64748b;line-height:1.55;flex:1}.badge{display:inline-block;background:#eef2ff;color:#3730a3;padding:6px 10px;border-radius:30px;font-size:12px;font-weight:800;margin-bottom:12px}.completed-badge{background:#dcfce7;color:#166534}
+.lesson-header{background:linear-gradient(135deg,#eff6ff,#fff);padding:25px;border-radius:18px;margin-bottom:18px}.lesson-section{background:#fff;padding:22px;border-radius:16px;margin-bottom:16px}.instruction{padding:13px;border-left:4px solid #2563eb;background:#f8fafc;margin:9px 0;border-radius:0 10px 10px 0}.task-box,.task{background:#eff6ff;padding:16px;border-radius:12px;line-height:1.6}.quiz-question{background:#fff;border-radius:14px;padding:18px;margin:12px 0;border:1px solid #e5e7eb}.question-number{font-size:12px;color:#64748b;font-weight:800;margin-bottom:8px}.option{display:block;padding:11px;margin-top:8px;background:#f8fafc;border-radius:9px;cursor:pointer}.option input{width:auto;margin-right:8px}.difficulty-title{font-weight:900;margin:22px 0 8px;font-size:18px}.result-box{background:#fff;border-radius:20px;padding:30px;text-align:center}.score-big{font-size:60px;font-weight:900;color:#2563eb}.result-good{color:#16a34a}.result-bad{color:#dc2626}
+.achievement-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.achievement{text-align:center;background:#fff;padding:25px;border-radius:16px}.icon{font-size:45px;margin-bottom:10px}
+.table-wrap{overflow:auto}.admin-table{width:100%;border-collapse:collapse;background:#fff}.admin-table th,.admin-table td{padding:13px;border-bottom:1px solid #e5e7eb;text-align:left;white-space:nowrap}.admin-table th{background:#f8fafc}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:20px;z-index:100}.modal-box{width:min(600px,100%);background:#fff;border-radius:20px;padding:25px;max-height:90vh;overflow:auto}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.mobile-menu{display:block}.cards{grid-template-columns:repeat(2,1fr)}.lesson-grid{grid-template-columns:1fr 1fr}.achievement-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.cards,.lesson-grid,.achievement-grid{grid-template-columns:1fr}.auth-card{padding:25px}.main{padding:12px}}
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="auth-screen">
+<div class="auth-card">
+<div class="logo">PC</div>
+<h1>PC Skills Academy</h1>
+<p class="auth-subtitle">Practical Computer Skills Learning Portal</p>
+<div class="login-tabs">
+<button id="studentTab" class="login-tab active" onclick="setLoginType('student')">Student</button>
+<button id="adminTab" class="login-tab" onclick="setLoginType('admin')">Administrator</button>
+</div>
+<form id="loginForm">
+<div class="form-group"><label>Email Address</label><input id="loginEmail" type="email" required placeholder="Enter email"></div>
+<div class="form-group"><label>Password</label><input id="loginPassword" type="password" required placeholder="Enter password"></div>
+<button id="loginBtn" class="primary full" type="submit">Student Login</button>
+</form>
+<div id="loginMessage" class="message"></div>
+</div>
+</div>
+
+<div id="app" class="app hidden">
+<aside id="sidebar" class="sidebar">
+<div class="sidebar-title">💻 PC Skills Academy</div>
+<button class="nav active" onclick="showPage('dashboard')">🏠 Dashboard</button>
+<button class="nav" onclick="showPage('lessons')">📚 Lessons</button>
+<button class="nav" onclick="showPage('achievements')">🏆 Achievements</button>
+<div id="adminNavigation" class="hidden">
+<button class="nav" onclick="showPage('admin')">👨‍💼 Admin Monitor</button>
+<button class="nav" onclick="showPage('students')">👨‍🎓 Students</button>
+</div>
+<button class="nav" onclick="logout()">🚪 Logout</button>
+</aside>
+
+<main class="main">
+<div class="topbar"><button class="mobile-menu" onclick="toggleSidebar()">☰</button><div><strong id="welcome">Welcome</strong><div class="label">Practical Computer Skills • 8 Weeks • 24 Lessons</div></div></div>
+<div class="page">
+
+<section id="dashboardPage">
+<div class="hero"><h1>Learn by Doing 💻</h1><p style="margin-top:8px">Three practical lessons every week. Complete the task, submit your reflection and pass the 15-question assessment.</p></div>
+<div class="cards">
+<div class="card"><div class="label">Overall Assessment Progress</div><div id="dashProgress" class="stat">0%</div></div>
+<div class="card"><div class="label">Lessons Passed</div><div id="dashLessons" class="stat">0/24</div></div>
+<div class="card"><div class="label">Current Week</div><div id="dashWeek" class="stat">1</div></div>
+<div class="card"><div class="label">Achievements</div><div id="dashAchievements" class="stat">0</div></div>
+</div>
+<div class="card"><h3>Overall Progress</h3><br><div class="progress"><div id="dashProgressBar" class="progress-bar" style="width:0%"></div></div><br><p id="progressText">Complete your assessments to build your progress.</p></div><br>
+<div class="card"><h3>Next Lesson</h3><br><div id="nextLesson">Loading...</div></div>
+</section>
+
+<section id="lessonsPage" class="hidden"><h2>8-Week Practical Programme</h2><p class="label">3 lessons per week • 24 lessons • 15-question assessment per lesson</p><div id="lessonsContainer"></div></section>
+<section id="lessonPage" class="hidden"><button class="secondary" onclick="showPage('lessons')">← Back to Lessons</button><br><br><div id="lessonContent"></div></section>
+<section id="quizPage" class="hidden"><button class="secondary" onclick="showPage('lessons')">← Back to Lessons</button><br><br><div id="quizContent"></div></section>
+<section id="quizResultPage" class="hidden"><div id="quizResult"></div></section>
+<section id="achievementsPage" class="hidden"><h2>My Achievements</h2><br><div id="achievementContainer" class="achievement-grid"></div></section>
+
+<section id="adminPage" class="hidden">
+<h2>Administrator Monitor</h2><br>
+<div class="cards">
+<div class="card"><div class="label">Total Students</div><div id="totalStudents" class="stat">0</div></div>
+<div class="card"><div class="label">Active Students</div><div id="activeStudents" class="stat">0</div></div>
+<div class="card"><div class="label">Completed Programme</div><div id="completedStudents" class="stat">0</div></div>
+<div class="card"><div class="label">Average Progress</div><div id="averageProgress" class="stat">0%</div></div>
+</div>
+<div class="card"><h3>Student Progress</h3><br><div class="table-wrap"><table class="admin-table"><thead><tr><th>Student</th><th>Progress</th><th>Passed</th><th>Week</th><th>Last Activity</th><th>View</th></tr></thead><tbody id="adminTable"></tbody></table></div></div>
+</section>
+
+<section id="studentsPage" class="hidden">
+<div style="display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap"><div><h2>Student Management</h2><p class="label">Create and monitor student accounts.</p></div><button class="primary" onclick="openStudentModal()">+ Create Student</button></div><br>
+<div class="card"><div class="table-wrap"><table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Progress</th><th>Passed</th><th>Status</th></tr></thead><tbody id="studentsTable"></tbody></table></div></div>
+</section>
+
+<section id="studentDetailPage" class="hidden"><button class="secondary" onclick="showPage('admin')">← Back to Monitor</button><br><br><div id="studentDetail"></div></section>
+</div>
+</main>
+</div>
+
+<div id="studentModal" class="modal hidden"><div class="modal-box"><h2>Create Student</h2><br>
+<form id="studentForm">
+<div class="form-group"><label>Student Name</label><input id="studentName" required></div>
+<div class="form-group"><label>Email</label><input id="studentEmail" type="email" required></div>
+<div class="form-group"><label>Password</label><input id="studentPassword" type="password" minlength="6" required></div>
+<button class="primary full">Create Student</button>
+</form>
+<div id="studentMessage" class="message"></div><br><button class="secondary" onclick="closeStudentModal()">Close</button>
+</div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={
+apiKey:"AIzaSyCL3vOyJlD6CfpU43SRxKTPo_rDqoEgfc8",
+authDomain:"comprehension-5b15d.firebaseapp.com",
+databaseURL:"https://comprehension-5b15d-default-rtdb.firebaseio.com",
+projectId:"comprehension-5b15d",
+storageBucket:"comprehension-5b15d.firebasestorage.app",
+messagingSenderId:"999712774012",
+appId:"1:999712774012:web:a3df9b0f32f5cfb3f076f9"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+let currentUser=null,currentProfile=null,loginType="student",activeLesson=null;
+
+/* 24 lessons: the course follows the uploaded source's 8-week / 3-lessons-per-week structure. */
+const skillWeeks={
+1:{title:"Computer Fundamentals",items:[
+["Getting to Know Your Computer","Identify the major physical components of a computer and understand their functions.",["Identify the monitor.","Identify the keyboard.","Identify the mouse or touchpad.","Identify the system unit.","Locate USB ports.","Locate the power button.","Identify audio ports.","Identify other connected devices."],"Identify at least five computer components and explain the function of each."],
+["Using the Windows Desktop","Learn how to navigate the Windows desktop and basic applications.",["Start the computer.","Identify the desktop.","Locate Start and the taskbar.","Open Start.","Search for Notepad.","Open Notepad.","Minimise it.","Restore it from the taskbar.","Close it."],"Open, minimise, restore and close three Windows applications."],
+["Windows Settings","Locate and understand important Windows settings.",["Open Start.","Open Settings.","Open System.","Find Display.","Find Sound.","Find Storage.","Open Personalisation.","Locate Background settings.","Return to Settings."],"Locate Display, Sound, Storage and Personalisation settings and explain their purposes."]
+]},
+2:{title:"Files and Folders",items:[
+["Creating Folders","Create and organise folders logically.",["Open File Explorer.","Open Documents.","Create Computer Practice.","Open it.","Create Documents.","Create Pictures.","Create Projects."],"Create a Computer Practice folder containing Documents, Pictures and Projects."],
+["Copying and Moving Files","Understand how to copy and move files.",["Find a practice file.","Right-click it.","Choose Copy.","Open another folder.","Paste it.","Return to the original.","Use Cut.","Paste into another folder."],"Copy one file and move another file to appropriate folders."],
+["Searching for Files","Use Windows Search to locate files.",["Open File Explorer.","Click Search.","Enter part of a filename.","Press Enter.","Review results.","Search for PDF files.","Open a result.","Identify its location."],"Find three files using Windows Search and record their locations."]
+]},
+3:{title:"Microsoft Word",items:[
+["Creating a Word Document","Create, save and reopen a Microsoft Word document.",["Open Word.","Select Blank Document.","Type a short paragraph.","Click File.","Choose Save As.","Select your practice folder.","Enter a filename.","Save.","Close Word.","Reopen the file."],"Create a one-page document titled My Computer Learning Journey."],
+["Formatting Text","Apply basic professional text formatting.",["Open your document.","Select the title.","Apply Bold.","Increase font size.","Centre the title.","Select a paragraph.","Change font size.","Try Italic.","Try Underline.","Save."],"Format your document professionally using headings, alignment, font sizes and emphasis."],
+["Professional Document","Create a properly formatted formal document.",["Open Word.","Create a blank document.","Type a formal application letter.","Add the date.","Add a heading.","Write clear paragraphs.","Use consistent formatting.","Check spelling.","Save."],"Create and save a professional one-page application letter."]
+]},
+4:{title:"Word Documents and PDF",items:[
+["Tables in Word","Create and format tables.",["Open Word.","Insert a table.","Choose rows and columns.","Enter headings.","Enter data.","Resize columns.","Apply table formatting.","Save."],"Create a table showing five students and three scores each."],
+["Pictures and Text Wrapping","Insert and position pictures.",["Open Word.","Insert a picture.","Resize it.","Move it.","Open layout options.","Try text wrapping.","Choose a suitable option.","Save."],"Create a one-page document containing text and one appropriately positioned image."],
+["Exporting to PDF","Prepare and export a finished document.",["Open a completed Word document.","Review spelling.","Check formatting.","Choose File.","Choose Save As or Export.","Select PDF.","Choose a location.","Save.","Open the PDF."],"Convert a finished document to PDF and verify that it opens correctly."]
+]},
+5:{title:"Internet and Online Skills",items:[
+["Connecting to the Internet","Understand basic internet access.",["Locate the network icon.","Open available networks.","Identify your connection.","Connect if authorised.","Open a browser.","Visit a safe website.","Close the browser."],"Connect to an available authorised network and open a website."],
+["Web Searching","Use search engines effectively.",["Open a browser.","Go to a search engine.","Enter clear keywords.","Read results.","Compare two results.","Avoid suspicious links.","Open a trusted source.","Return to results."],"Research a computer topic and record three useful facts."],
+["Email Basics","Compose and manage a basic email.",["Open your email service.","Create a new message.","Enter a recipient.","Add a subject.","Write a short message.","Attach a safe practice file if appropriate.","Review the message.","Send it."],"Draft a professional email with a clear subject and message."]
+]},
+6:{title:"Computer Safety and Security",items:[
+["Strong Passwords","Understand basic account security.",["Use long passwords.","Use different passwords.","Avoid obvious information.","Never share passwords.","Consider a password manager.","Sign out on shared computers.","Lock your PC."],"Create a personal ten-point computer safety checklist."],
+["Safe Files and Downloads","Recognise safer download practices.",["Use trusted websites.","Check file names.","Avoid suspicious attachments.","Do not install unknown software.","Scan files when appropriate.","Check publisher information.","Delete suspicious downloads."],"Create a checklist for safely downloading a file."],
+["Privacy and Updates","Understand basic privacy and maintenance.",["Open Windows Settings.","Find Windows Update.","Check update status.","Review privacy settings.","Review app permissions.","Lock the computer when leaving.","Restart after important updates when required."],"Review basic update and privacy settings and write what you found."]
+]},
+7:{title:"Microsoft Excel",items:[
+["Excel Basics","Understand workbooks, worksheets, cells, rows and columns.",["Open Excel.","Create a blank workbook.","Identify columns.","Identify rows.","Click a cell.","Enter text.","Enter a number.","Save."],"Create a simple student record containing names and scores."],
+["Excel Formulas","Use basic formulas for totals and averages.",["Enter five numbers.","Select another cell.","Enter =SUM(A1:A5).","Press Enter.","Enter =AVERAGE(A1:A5).","Change one score.","Observe the result.","Save."],"Calculate the total and average of five student scores."],
+["Excel Tables","Organise, sort and filter spreadsheet data.",["Create headings.","Enter several records.","Select data.","Format it as a table.","Sort records.","Use filters.","Save."],"Create a student results table with names, subjects and scores."]
+]},
+8:{title:"PowerPoint and Final Project",items:[
+["PowerPoint Basics","Create a basic presentation.",["Open PowerPoint.","Create a presentation.","Enter a title.","Add another slide.","Enter short points.","Insert an image.","Add more slides.","Save."],"Create a five-slide presentation titled What I Have Learned About Computers."],
+["Professional Presentation","Improve presentation design and delivery.",["Use short points.","Use readable fonts.","Use consistent fonts.","Use suitable images.","Check spelling.","Review slide order.","Run the slideshow.","Practise explaining each slide."],"Complete your presentation and practise delivering it."],
+["Final Practical Computer Project","Demonstrate practical skills learned throughout the course.",["Create a Final Computer Project folder.","Create a Word document.","Create an Excel spreadsheet.","Create a PowerPoint presentation.","Save all files.","Convert the Word document to PDF.","Review every file.","Organise the folder.","Check filenames."],"Complete a final project containing a Word document, Excel spreadsheet, PDF and PowerPoint presentation."]
+]}};
+
+/* Build 24 lessons from the 8 skill weeks. */
+const lessons={};
+for(let w=1;w<=8;w++){
+ lessons[w]={title:skillWeeks[w].title,items:skillWeeks[w].items.map(x=>({title:x[0],objective:x[1],instructions:x[2],task:x[3]}))};
+}
+
+/* 15-question bank per skill area: 5 easy, 5 standard, 5 advanced. */
+const quizBank={
+1:[
+["easy","Which device displays information from the computer?","Monitor",["Monitor","Keyboard","Mouse","USB cable"]],
+["easy","Which device is mainly used for typing?","Keyboard",["Monitor","Keyboard","Speaker","Printer"]],
+["easy","Which device moves the pointer?","Mouse",["Mouse","Monitor","Printer","Router"]],
+["easy","Where is the Windows Start button normally found?","Taskbar",["Taskbar","Recycle Bin","Monitor","File Explorer"]],
+["easy","Which Windows application can be used to manage files?","File Explorer",["File Explorer","Calculator","Paint","Camera"]],
+["standard","What is the main purpose of the system unit?","It contains major internal computer components",["It displays pictures","It contains major internal computer components","It prints documents","It connects only speakers"]],
+["standard","What normally happens when an application is minimised?","It remains open and can be restored",["It is deleted","It remains open and can be restored","Windows shuts down","The file is erased"]],
+["standard","Why are Windows settings useful?","They allow you to configure parts of the computer",["They only play music","They allow you to configure parts of the computer","They delete all files","They replace the keyboard"]],
+["standard","Which setting would you inspect to check available disk space?","Storage",["Storage","Sound","Personalisation","Mouse"]],
+["standard","What should you do before changing an unfamiliar setting?","Understand what the setting controls",["Change everything","Understand what the setting controls","Delete Windows","Turn off the monitor"]],
+["advanced","Why is learning the desktop important?","It makes navigation and application management easier",["It increases RAM","It makes navigation and application management easier","It replaces storage","It disables updates"]],
+["advanced","If an application is minimised but not closed, where can you normally find it?","Taskbar",["Recycle Bin","Taskbar","Control Panel only","USB drive"]],
+["advanced","Why should important settings not be changed without understanding them?","Incorrect changes can affect how the computer works",["They always improve performance","Incorrect changes can affect how the computer works","They delete the keyboard","They increase screen size automatically"]],
+["advanced","What is a good first step when learning a new Windows setting?","Read what the setting controls before changing it",["Change random options","Read what the setting controls before changing it","Delete system files","Disconnect the computer"]],
+["advanced","What is the main advantage of understanding basic computer components?","It helps you use and troubleshoot the computer more effectively",["It increases internet speed","It helps you use and troubleshoot the computer more effectively","It removes the need for files","It automatically upgrades Windows"]]
+],
+2:[
+["easy","What is a folder mainly used for?","Organising files",["Increasing RAM","Organising files","Connecting Wi-Fi","Printing"]],
+["easy","Which command makes a duplicate of a file?","Copy",["Delete","Copy","Rename","Shutdown"]],
+["easy","Which command is commonly used to move a file?","Cut",["Copy","Cut","Print","Open"]],
+["easy","Where can you search for a file in File Explorer?","Search box",["Search box","Taskbar clock","Monitor","Keyboard"]],
+["easy","Which application manages files and folders in Windows?","File Explorer",["Calculator","File Explorer","PowerPoint","Paint"]],
+["standard","What is the main difference between Copy and Cut?","Copy keeps the original while Cut moves it",["They are identical","Copy keeps the original while Cut moves it","Cut creates two files","Copy deletes the original"]],
+["standard","Why should folders have meaningful names?","They make files easier to find",["They increase storage","They make files easier to find","They improve monitor quality","They change passwords"]],
+["standard","What should you do after copying a file?","Paste it into the destination folder",["Delete it","Paste it into the destination folder","Restart the computer","Format the drive"]],
+["standard","What does Windows Search help you do?","Locate files and applications",["Increase RAM","Locate files and applications","Repair the monitor","Charge the laptop"]],
+["standard","Why should related files be kept together?","It makes them easier to manage",["It changes the processor","It makes them easier to manage","It disables Windows","It removes backups"]],
+["advanced","Why is organising files into folders important?","It makes information easier to manage and retrieve",["It changes the processor","It makes files invisible","It makes information easier to manage and retrieve","It removes backups"]],
+["advanced","If you use Cut and then Paste a file into another folder, what normally happens?","The file is moved",["The file is copied twice","The file is moved","The computer shuts down","The file becomes a PDF"]],
+["advanced","Which is a good filename?","Student_Results_2026",["new","Student_Results_2026","file","abc"]],
+["advanced","Why should you avoid storing every file on the desktop?","It can become difficult to find files",["It damages the monitor","It can become difficult to find files","It disables Windows","It prevents printing"]],
+["advanced","What should you do if you cannot remember where a file was saved?","Use File Explorer search",["Delete the file","Use File Explorer search","Turn off the computer","Format the computer"]]
+],
+3:[
+["easy","Which application is primarily used for word processing?","Microsoft Word",["Microsoft Word","Excel","Paint","Calculator"]],
+["easy","Which command saves a document under a chosen name?","Save As",["Save As","Copy","Print","Undo"]],
+["easy","What does Bold do?","Makes text thicker",["Deletes text","Makes text thicker","Changes page size","Prints the document"]],
+["easy","What does centre alignment do?","Places text in the centre",["Deletes text","Places text in the centre","Changes spelling","Closes Word"]],
+["easy","Why should you save a document?","To preserve your work",["To delete it","To preserve your work","To shut down Word","To change the keyboard"]],
+["standard","What is Save As useful for?","Creating a saved copy with a chosen name or format",["Deleting a document","Creating a saved copy with a chosen name or format","Opening the internet","Changing the monitor"]],
+["standard","Which formatting option makes text slanted?","Italic",["Bold","Italic","Underline","Centre"]],
+["standard","Which alignment is normally suitable for the main body of a formal letter?","Left",["Left","Right","Random","Vertical"]],
+["standard","Why should a formal document have consistent formatting?","It improves readability and professionalism",["It increases internet speed","It improves readability and professionalism","It removes spelling errors automatically","It increases storage"]],
+["standard","What should you do before closing an important Word document?","Save it",["Delete it","Save it","Rename Windows","Disconnect the keyboard"]],
+["advanced","Why is a meaningful filename useful?","It makes the document easier to identify later",["It increases RAM","It makes the document easier to identify later","It changes fonts automatically","It sends the document by email"]],
+["advanced","Which sequence is most appropriate for creating a saved Word document?","Create > type > format > save",["Delete > print > close","Create > type > format > save","Restart > type > delete","Save > delete > create"]],
+["advanced","What is the benefit of checking spelling before submitting a document?","It reduces avoidable writing errors",["It increases screen brightness","It reduces avoidable writing errors","It formats the hard drive","It changes the keyboard"]],
+["advanced","Why should a formal application letter be clearly structured?","It makes the information easier for the reader to understand",["It makes the computer faster","It makes the information easier for the reader to understand","It prevents saving","It removes email"]],
+["advanced","What should you do if you accidentally close Word before saving?","Use recovery options if available and save regularly in future",["Format the computer","Use recovery options if available and save regularly in future","Delete Windows","Replace the monitor"]]
+],
+4:[
+["easy","Which Word tab is normally used to insert a table?","Insert",["Insert","Review","View","Help"]],
+["easy","What can a Word table contain?","Rows and columns",["Only pictures","Rows and columns","Only numbers","Only headings"]],
+["easy","Which menu can be used to insert pictures?","Insert",["Insert","Home only","File only","Help"]],
+["easy","What can you change after inserting a picture?","Its size",["Its size","The computer password","The CPU","The keyboard"]],
+["easy","Which format is commonly used for sharing a finished document?","PDF",["PDF","EXE","BAT","DLL"]],
+["standard","Why are tables useful in documents?","They organise related information",["They increase internet speed","They organise related information","They shut down Word","They remove pictures"]],
+["standard","What does text wrapping control?","How text flows around an image",["The computer password","How text flows around an image","The CPU speed","The file extension"]],
+["standard","Why should an inserted image be resized appropriately?","To keep the document readable and balanced",["To increase RAM","To keep the document readable and balanced","To disable Word","To delete text"]],
+["standard","Why should you review a document before exporting it to PDF?","To catch errors before producing the final copy",["To increase internet speed","To catch errors before producing the final copy","To remove Windows","To change the CPU"]],
+["standard","What should you verify after creating a PDF?","That it opens and the content appears correctly",["Only its colour","That it opens and the content appears correctly","That it changes Windows","That it deletes the Word file"]],
+["advanced","Why is a table better than randomly spaced text for structured records?","It keeps related information organised in rows and columns",["It increases storage","It keeps related information organised in rows and columns","It disables printing","It removes pictures"]],
+["advanced","Why is PDF useful for sharing a finished document?","It helps preserve the document's layout across devices",["It increases RAM","It helps preserve the document's layout across devices","It changes the keyboard","It deletes images"]],
+["advanced","What is a professional image placement practice?","Use an appropriate size and wrapping so it supports the text",["Make it cover all text","Use an appropriate size and wrapping so it supports the text","Hide the image","Delete the text"]],
+["advanced","What is a good final-document workflow?","Create, format, review, save and export",["Delete, format, close","Create, format, review, save and export","Restart, print, delete","Export before writing"]],
+["advanced","Why should the original editable document normally be retained after PDF export?","It allows future editing while the PDF remains a shareable final copy",["It increases RAM","It allows future editing while the PDF remains a shareable final copy","It deletes the PDF","It disables Word"]]
+],
+5:[
+["easy","What application is commonly used to browse websites?","Web browser",["Web browser","Calculator","Paint","Notepad"]],
+["easy","What is a search engine used for?","Finding information online",["Finding information online","Changing RAM","Formatting a drive","Printing"]],
+["easy","What should an email normally have to identify its purpose?","Subject",["Subject","Wallpaper","CPU","Taskbar"]],
+["easy","What is an attachment?","A file sent with a message",["A file sent with a message","A keyboard","A monitor","A browser tab"]],
+["easy","What should you use when visiting websites?","A trusted browser",["A trusted browser","Random software","Unknown attachments","System files"]],
+["standard","Why should search keywords be specific?","They help produce more relevant results",["They increase RAM","They help produce more relevant results","They change the monitor","They delete files"]],
+["standard","Why should you compare information from multiple sources?","It can help identify reliable information",["It increases internet speed","It can help identify reliable information","It formats Windows","It deletes the browser"]],
+["standard","Why should suspicious links be avoided?","They may lead to unsafe or fraudulent sites",["They increase storage","They may lead to unsafe or fraudulent sites","They improve the monitor","They create folders"]],
+["standard","Why is a clear email subject useful?","It tells the recipient what the message concerns",["It changes the keyboard","It tells the recipient what the message concerns","It increases RAM","It closes the browser"]],
+["standard","What should you check before opening an attachment?","Whether you trust the sender and expect the file",["Only the file colour","Whether you trust the sender and expect the file","The wallpaper","The taskbar"]],
+["advanced","What makes an online source more trustworthy?","Clear authorship, relevant evidence and a credible source",["Lots of pop-ups","Clear authorship, relevant evidence and a credible source","Random advertisements","Unknown downloads"]],
+["advanced","Why should you avoid entering sensitive information on suspicious websites?","It may be captured or misused",["It increases speed","It may be captured or misused","It improves sound","It creates folders"]],
+["advanced","What is a good research process?","Search, compare sources, verify facts and record useful information",["Search one result only","Search, compare sources, verify facts and record useful information","Download everything","Copy without checking"]],
+["advanced","Why is a professional email different from a casual message?","It uses a clear subject, appropriate language and relevant information",["It uses random words","It uses a clear subject, appropriate language and relevant information","It has no subject","It must contain pictures"]],
+["advanced","What should you do if an email asks you to install unknown software urgently?","Do not install it until its legitimacy is verified",["Install immediately","Do not install it until its legitimacy is verified","Forward it to everyone","Disable security"]]
+],
+6:[
+["easy","What is a strong password designed to protect?","An account",["An account","A monitor","A mouse","A folder"]],
+["easy","Should you share your password with other people?","No",["Yes","No","Only online","Always"]],
+["easy","What should you do with suspicious attachments?","Avoid opening them",["Open immediately","Avoid opening them","Forward them","Rename Windows"]],
+["easy","What should you do when leaving a shared computer?","Lock or sign out",["Leave it open","Lock or sign out","Delete Windows","Remove the monitor"]],
+["easy","Why should Windows be updated?","Updates can improve security and reliability",["To change the keyboard","Updates can improve security and reliability","To delete files","To reduce screen size"]],
+["standard","Why should passwords be different for important accounts?","A compromised password is less likely to expose other accounts",["It increases RAM","A compromised password is less likely to expose other accounts","It changes the screen","It deletes files"]],
+["standard","Why should unknown software not be installed?","It may be unsafe or unwanted",["It increases storage","It may be unsafe or unwanted","It improves typing","It creates folders"]],
+["standard","Why should a computer be locked when unattended?","It prevents unauthorised access",["It increases speed","It prevents unauthorised access","It deletes files","It opens email"]],
+["standard","What should you do if a download looks suspicious?","Do not open it and verify the source",["Open it","Do not open it and verify the source","Send it to friends","Disable security"]],
+["standard","Why are privacy settings important?","They help control how information and permissions are used",["They increase RAM","They help control how information and permissions are used","They format drives","They delete applications"]],
+["advanced","What is a good response to a suspicious urgent message asking for credentials?","Verify the request through a trusted channel before responding",["Reply with your password","Verify the request through a trusted channel before responding","Forward your credentials","Disable security"]],
+["advanced","Why is regular updating part of computer maintenance?","It can address security issues and improve software reliability",["It changes the mouse","It can address security issues and improve software reliability","It deletes all documents","It disables the internet"]],
+["advanced","Why is a long unique password generally safer than a short obvious one?","It is harder to guess or brute-force",["It increases monitor size","It is harder to guess or brute-force","It changes Windows","It removes the need for security"]],
+["advanced","What is the safest approach to unknown email attachments?","Verify the sender and expected content before opening",["Open everything","Verify the sender and expected content before opening","Disable antivirus","Forward the file"]],
+["advanced","Why should users understand privacy permissions?","They can make informed decisions about which apps access information",["They increase CPU speed","They can make informed decisions about which apps access information","They delete Windows","They replace the keyboard"]]
+],
+7:[
+["easy","In Excel, what is a cell?","A single location where data can be entered",["A single location where data can be entered","A whole workbook","A printer","A folder"]],
+["easy","What identifies a column in Excel?","A letter",["A letter","A paragraph","A picture","A password"]],
+["easy","What identifies a row in Excel?","A number",["A number","A letter only","A colour","A filename"]],
+["easy","Which formula adds values?","SUM",["SUM","ADDALL","TOTALTEXT","PLUSFILE"]],
+["easy","Which formula calculates an average?","AVERAGE",["AVERAGE","MEANFILE","MID","COUNTALL"]],
+["standard","What is a workbook?","An Excel file containing worksheets",["A Word document","An Excel file containing worksheets","A picture","A browser"]],
+["standard","Why are headings useful in a spreadsheet?","They identify what each column contains",["They increase RAM","They identify what each column contains","They delete formulas","They close Excel"]],
+["standard","What happens when a formula references cells containing numbers?","Excel calculates the result",["The computer shuts down","Excel calculates the result","The file becomes a picture","The keyboard changes"]],
+["standard","Why is a table useful for student records?","It keeps related data organised and sortable",["It increases internet speed","It keeps related data organised and sortable","It removes scores","It disables Excel"]],
+["standard","What does filtering help you do?","Display records that meet selected criteria",["Delete all records","Display records that meet selected criteria","Change the CPU","Format Windows"]],
+["advanced","Why are formulas better than manually recalculating repeated totals?","They update results automatically when source values change",["They delete data","They update results automatically when source values change","They slow the computer","They remove worksheets"]],
+["advanced","What is the benefit of sorting student records?","It arranges data according to a chosen order",["It deletes records","It arranges data according to a chosen order","It changes Windows","It removes formulas"]],
+["advanced","Why should spreadsheet headings be clear?","They make the meaning of each field easy to understand",["They increase RAM","They make the meaning of each field easy to understand","They delete rows","They change the monitor"]],
+["advanced","What should you check after entering a formula?","That the result is sensible and the referenced range is correct",["Only the font colour","That the result is sensible and the referenced range is correct","That the computer is off","That the keyboard is unplugged"]],
+["advanced","Why is a well-organised spreadsheet useful in practical work?","It makes data easier to enter, analyse, find and present",["It deletes files","It makes data easier to enter, analyse, find and present","It disables Excel","It removes formulas"]]
+],
+8:[
+["easy","Which application is designed for presentations?","PowerPoint",["PowerPoint","Excel","Notepad","Calculator"]],
+["easy","What is a slide?","A page of a presentation",["A page of a presentation","A spreadsheet cell","A folder","A Windows setting"]],
+["easy","What can you insert into a PowerPoint slide?","Text and images",["Only passwords","Text and images","Only folders","Only formulas"]],
+["easy","Why should you save a presentation?","To preserve your work",["To delete it","To preserve your work","To shut down Windows","To change the keyboard"]],
+["easy","What should you check before submitting a project?","Files and content",["Only the mouse","Files and content","Only wallpaper","Only the keyboard"]],
+["standard","Why should presentation slides avoid excessive text?","Large amounts of text can make slides difficult to read",["It increases storage","Large amounts of text can make slides difficult to read","It deletes images","It changes Excel"]],
+["standard","Why should fonts be readable?","The audience must be able to read the presentation",["It makes the computer faster","The audience must be able to read the presentation","It prevents saving","It removes pictures"]],
+["standard","Why should a presentation have consistent design?","It creates a clearer professional appearance",["It deletes slides","It creates a clearer professional appearance","It stops PowerPoint","It changes the keyboard"]],
+["standard","Why should you run the slideshow before presenting?","To check how the presentation appears",["To delete the slides","To check how the presentation appears","To format the computer","To increase RAM"]],
+["standard","What should you check before submitting a final project?","Files, filenames, content and presentation quality",["Only the mouse","Files, filenames, content and presentation quality","Only the wallpaper","Only the keyboard"]],
+["advanced","Why should a presentation use short points rather than full paragraphs?","It helps the audience focus on the speaker and key ideas",["It makes the computer slower","It helps the audience focus on the speaker and key ideas","It deletes slides","It removes images"]],
+["advanced","Why should related project files be stored in one folder?","It makes the project easier to manage and submit",["It increases internet speed","It makes the project easier to manage and submit","It prevents PDF creation","It deletes PowerPoint"]],
+["advanced","Why is practising a presentation important?","It improves confidence, timing and delivery",["It changes the computer","It improves confidence, timing and delivery","It deletes slides","It removes the need for preparation"]],
+["advanced","What is the best final-project practice?","Check every file, organise the folder and verify the work before submission",["Submit random files","Check every file, organise the folder and verify the work before submission","Delete the folder","Leave files unnamed"]],
+["advanced","Why should the final project demonstrate several applications?","It provides evidence of a range of practical computer skills",["It increases RAM","It provides evidence of a range of practical computer skills","It disables Windows","It removes the need for assessment"]]
+]};
+
+function hashPassword(password){
+return crypto.subtle.digest("SHA-256",new TextEncoder().encode(password)).then(buf=>Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join(""));
+}
+function setLoginType(type){
+loginType=type;
+studentTab.classList.toggle("active",type==="student");
+adminTab.classList.toggle("active",type==="admin");
+loginBtn.textContent=type==="admin"?"Administrator Login":"Student Login";
+}
+function loginMessage(msg,type="error"){
+loginMessageEl=document.getElementById("loginMessage");
+loginMessageEl.textContent=msg;loginMessageEl.className="message show "+type;
+}
+async function login(e){
+e.preventDefault();
+const email=loginEmail.value.trim().toLowerCase(),password=loginPassword.value;
+loginBtn.disabled=true;loginBtn.textContent="Checking...";
+try{
+const snap=await db.ref("users").once("value"),users=snap.val()||{},hash=await hashPassword(password);
+let found=null;
+Object.entries(users).some(([key,u])=>{
+if(u&&String(u.email||"").toLowerCase()===email&&u.passwordHash===hash&&u.status!=="disabled"){found={...u,uid:u.uid||key};return true}return false;
+});
+if(!found)throw Error("Incorrect email or password.");
+if(found.role!==loginType)throw Error("This account is registered as a "+found.role+" account.");
+currentUser=found;localStorage.setItem("pcSkillsSession",JSON.stringify({uid:found.uid,role:found.role,email:found.email}));
+await db.ref("users/"+found.uid).update({lastActivity:firebase.database.ServerValue.TIMESTAMP});
+enterApp();
+}catch(err){loginMessage(err.message)}
+finally{loginBtn.disabled=false;loginBtn.textContent=loginType==="admin"?"Administrator Login":"Student Login"}
+}
+async function restoreSession(){
+try{
+const s=JSON.parse(localStorage.getItem("pcSkillsSession")||"null");if(!s?.uid)return;
+const snap=await db.ref("users/"+s.uid).once("value"),u=snap.val();
+if(!u||u.status==="disabled"){localStorage.removeItem("pcSkillsSession");return}
+currentUser={...u,uid:s.uid};enterApp();
+}catch(e){console.warn(e)}
+}
+function enterApp(){
+loginScreen.classList.add("hidden");app.classList.remove("hidden");
+welcome.textContent="Welcome, "+(currentUser.name||"User");
+adminNavigation.classList.toggle("hidden",currentUser.role!=="admin");
+updateDashboard();renderLessons();
+}
+function logout(){localStorage.removeItem("pcSkillsSession");location.reload()}
+function toggleSidebar(){sidebar.classList.toggle("open")}
+function showPage(page){
+["dashboard","lessons","lesson","quiz","quizResult","achievements","admin","students","studentDetail"].forEach(p=>document.getElementById(p+"Page")?.classList.add("hidden"));
+document.getElementById(page+"Page")?.classList.remove("hidden");
+if(page==="dashboard")updateDashboard();
+if(page==="lessons")renderLessons();
+if(page==="achievements")renderAchievements();
+if(page==="admin")loadAdmin();
+if(page==="students")loadStudents();
+}
+function renderLessons(){
+if(!currentUser||currentUser.role==="admin")return;
+const c=lessonsContainer;c.innerHTML="";
+for(let w=1;w<=8;w++){
+const h=document.createElement("h3");h.className="week-title";h.textContent="Week "+w+": "+lessons[w].title;c.appendChild(h);
+const grid=document.createElement("div");grid.className="lesson-grid";
+lessons[w].items.forEach((lesson,i)=>{
+const n=(w-1)*3+i+1,passed=!!(currentUser.lessonResults?.[n]?.passed);
+const card=document.createElement("div");card.className="lesson-card";
+card.innerHTML=`<span class="badge ${passed?"completed-badge":""}">${passed?"✓ Passed":"Lesson "+n}</span><h3>${lesson.title}</h3><br><p>${lesson.objective}</p><br><button class="secondary" onclick="openLesson(${w},${i},${n})">${passed?"Review Lesson":"Start Lesson"}</button>`;
+grid.appendChild(card);
+});c.appendChild(grid);
+}}
+function openLesson(w,i,n){
+activeLesson={week:w,index:i,number:n};const l=lessons[w].items[i],r=currentUser.lessonResults?.[n];
+document.getElementById("lessonContent").innerHTML=`
+<div class="lesson-header"><small>WEEK ${w} • LESSON ${n}</small><h1>${l.title}</h1><p>${l.objective}</p></div>
+<div class="lesson-section"><h3>📖 Study Instructions</h3>${l.instructions.map((s,i)=>`<div class="instruction"><strong>Step ${i+1}</strong><br>${s}</div>`).join("")}</div>
+<div class="lesson-section"><h3>💻 Practical Task</h3><div class="task-box">${l.task}</div><br><p>Perform this task on your computer. Then describe what you did, what you created, difficulties encountered and what you learned.</p><br><textarea id="practicalAnswer" placeholder="Type your practical-task report...">${currentUser.practicalTasks?.["lesson"+n]?.response||""}</textarea><br><button class="primary" onclick="savePracticalTask()">Save Practical Task</button></div>
+<div class="lesson-section"><h3>📝 Standard Assessment</h3><p>15 questions: <strong>5 Easy + 5 Standard + 5 Advanced</strong>. A score of 60% or above passes the lesson.</p><br><button class="primary" onclick="startQuiz(${w},${i},${n})">${r?"Retake Assessment":"Start 15-Question Assessment"}</button></div>`;
+showPage("lesson");
+}
+async function savePracticalTask(){
+const text=document.getElementById("practicalAnswer").value.trim();if(!text)return alert("Please describe the practical task.");
+const n=activeLesson.number;
+await db.ref(`practicalTasks/${currentUser.uid}/lesson${n}`).set({lesson:n,week:activeLesson.week,response:text,submittedAt:firebase.database.ServerValue.TIMESTAMP});
+await db.ref(`users/${currentUser.uid}`).update({lastActivity:firebase.database.ServerValue.TIMESTAMP});
+currentUser.practicalTasks=currentUser.practicalTasks||{};currentUser.practicalTasks["lesson"+n]={response:text};
+alert("Practical task saved for the teacher/admin.");
+}
+function buildQuizForLesson(n){
+const skill=Math.ceil(n/3);return quizBank[skill].map(q=>({difficulty:q[0],question:q[1],answer:q[2],options:[...q[3]]}));
+}
+function startQuiz(w,i,n){
+activeLesson={week:w,index:i,number:n};const qs=buildQuizForLesson(n);let html=`<div class="lesson-header"><small>LESSON ${n}</small><h1>${lessons[w].items[i].title} Assessment</h1><p>15 questions • 5 Easy • 5 Standard • 5 Advanced</p></div><form id="quizForm">`,last="";
+qs.forEach((q,i)=>{
+if(q.difficulty!==last){html+=`<div class="difficulty-title">${q.difficulty==="easy"?"🟢 EASY QUESTIONS":q.difficulty==="standard"?"🟡 STANDARD QUESTIONS":"🔴 ADVANCED QUESTIONS"}</div>`;last=q.difficulty}
+html+=`<div class="quiz-question"><div class="question-number">Question ${i+1}</div><strong>${escapeHtml(q.question)}</strong>${q.options.map(o=>`<label class="option"><input type="radio" name="q${i}" value="${escapeHtml(o)}" required> ${escapeHtml(o)}</label>`).join("")}</div>`;
+});
+html+=`<button class="primary" type="submit">Submit Assessment</button></form>`;
+quizContent.innerHTML=html;document.getElementById("quizForm").addEventListener("submit",submitQuiz);showPage("quiz");
+}
+function escapeHtml(t){return String(t).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+async function submitQuiz(e){
+e.preventDefault();const qs=buildQuizForLesson(activeLesson.number);let score=0,ec=0,sc=0,ac=0,answers={};
+qs.forEach((q,i)=>{const el=document.querySelector(`input[name="q${i}"]:checked`),a=el?.value||null;answers[i]=a;if(a===q.answer){score++;if(q.difficulty==="easy")ec++;if(q.difficulty==="standard")sc++;if(q.difficulty==="advanced")ac++}});
+const pct=Math.round(score/15*100),passed=pct>=60;
+const result={score,total:15,percentage:pct,passed,difficulty:{easy:{correct:ec,total:5,percentage:ec*20},standard:{correct:sc,total:5,percentage:sc*20},advanced:{correct:ac,total:5,percentage:ac*20}},answers,attemptedAt:Date.now()};
+const old=currentUser.lessonResults?.[activeLesson.number];const best=old&&old.percentage>pct?old:result;
+const results={...(currentUser.lessonResults||{}),[activeLesson.number]:{...best,lastAttempt:{score,percentage:pct,passed}}};
+const passedLessons=Object.values(results).filter(r=>r.passed).length;
+const attempted=Object.values(results).filter(r=>typeof r.percentage==="number");
+const progress=attempted.length?Math.round(attempted.reduce((s,r)=>s+r.percentage,0)/attempted.length):0;
+const currentWeek=Math.min(8,Math.floor(passedLessons/3)+1);
+await db.ref(`quizResults/${currentUser.uid}/lesson${activeLesson.number}`).push(result);
+await db.ref(`users/${currentUser.uid}`).update({lessonResults:results,passedLessons,progress,currentWeek,lastActivity:firebase.database.ServerValue.TIMESTAMP});
+currentUser={...currentUser,lessonResults:results,passedLessons,progress,currentWeek};await createAchievements(passedLessons);showQuizResult(result,activeLesson.number);
+}
+function showQuizResult(r,n){
+quizResult.innerHTML=`<div class="result-box"><div class="score-big">${r.percentage}%</div><h2 class="${r.passed?"result-good":"result-bad"}">${r.passed?"🎉 Lesson Passed":"❌ Lesson Not Yet Passed"}</h2><br><p>You scored <strong>${r.score}/15</strong></p><br><div class="cards"><div class="card"><div class="label">Easy</div><div class="stat">${r.difficulty.easy.correct}/5</div></div><div class="card"><div class="label">Standard</div><div class="stat">${r.difficulty.standard.correct}/5</div></div><div class="card"><div class="label">Advanced</div><div class="stat">${r.difficulty.advanced.correct}/5</div></div><div class="card"><div class="label">Pass mark</div><div class="stat">60%</div></div></div><br><p>${r.passed?"This assessment contributes to your progress.":"Review the lesson and try again. You need at least 60% to pass."}</p><br><button class="primary" onclick="openLesson(${activeLesson.week},${activeLesson.index},${n})">Review Lesson</button> <button class="secondary" onclick="showPage('lessons')">Back to Lessons</button></div>`;
+showPage("quizResult");
+}
+async function createAchievements(p){
+const ref=db.ref(`achievements/${currentUser.uid}`),defs=[[1,"firstLesson","🌱","First Step","Passed your first assessment."],[3,"week1","🥉","Week One Champion","Passed three assessments."],[6,"week2","🥈","Building Skills","Passed six assessments."],[12,"halfway","🏅","Halfway Hero","Passed 12 assessments."],[18,"advancedLearner","⭐","Advanced Learner","Passed 18 assessments."],[24,"graduate","🏆","Computer Skills Graduate","Passed all 24 assessments."]];
+for(const [n,id,icon,title,desc] of defs)if(p>=n)await ref.child(id).set({title,description:desc,icon,earnedAt:firebase.database.ServerValue.TIMESTAMP});
+}
+async function renderAchievements(){
+const earned=(await db.ref(`achievements/${currentUser.uid}`).once("value")).val()||{};
+const defs=[["firstLesson","🌱","First Step","Pass your first assessment."],["week1","🥉","Week One Champion","Pass three assessments."],["week2","🥈","Building Skills","Pass six assessments."],["halfway","🏅","Halfway Hero","Pass 12 assessments."],["advancedLearner","⭐","Advanced Learner","Pass 18 assessments."],["graduate","🏆","Computer Skills Graduate","Pass all 24 assessments."]];
+achievementContainer.innerHTML=defs.map(a=>`<div class="achievement"><div class="icon">${earned[a[0]]?a[1]:"🔒"}</div><h3>${a[2]}</h3><br><p>${a[3]}</p><br><span class="badge ${earned[a[0]]?"completed-badge":""}">${earned[a[0]]?"Earned":"Locked"}</span></div>`).join("");
+}
+async function updateDashboard(){
+const u=(await db.ref(`users/${currentUser.uid}`).once("value")).val();currentUser={...u,uid:currentUser.uid};
+if(currentUser.role==="admin"){dashProgress.textContent="ADMIN";dashLessons.textContent="-";dashWeek.textContent="-";progressText.textContent="Use Admin Monitor to monitor students.";return}
+const p=currentUser.progress||0,c=currentUser.passedLessons||0;dashProgress.textContent=p+"%";dashLessons.textContent=c+"/24";dashWeek.textContent=currentUser.currentWeek||1;dashProgressBar.style.width=p+"%";
+const a=(await db.ref(`achievements/${currentUser.uid}`).once("value")).val()||{};dashAchievements.textContent=Object.keys(a).length;progressText.textContent="Progress is calculated from the best assessment result for each attempted lesson.";findNextLesson();
+}
+function findNextLesson(){
+for(let n=1;n<=24;n++){if(!currentUser.lessonResults?.[n]?.passed){const w=Math.ceil(n/3),i=(n-1)%3,l=lessons[w].items[i];nextLesson.innerHTML=`<h3>${l.title}</h3><br><p>${l.objective}</p><br><button class="secondary" onclick="openLesson(${w},${i},${n})">Continue Learning</button>`;return}}
+nextLesson.innerHTML="<h3>🎉 Programme Complete!</h3><p>You have passed all 24 assessments.</p>";
+}
+async function loadAdmin(){
+if(currentUser.role!=="admin")return;const users=(await db.ref("users").once("value")).val()||{},students=Object.values(users).filter(u=>u.role==="student");
+totalStudents.textContent=students.length;activeStudents.textContent=students.filter(s=>s.status!=="disabled").length;completedStudents.textContent=students.filter(s=>(s.passedLessons||0)>=24).length;averageProgress.textContent=(students.length?Math.round(students.reduce((a,s)=>a+(s.progress||0),0)/students.length):0)+"%";
+adminTable.innerHTML=students.sort((a,b)=>(a.name||"").localeCompare(b.name||"")).map(s=>`<tr><td><strong>${escapeHtml(s.name||"")}</strong><br><small>${escapeHtml(s.email||"")}</small></td><td>${s.progress||0}%<div class="progress"><div class="progress-bar" style="width:${s.progress||0}%"></div></div></td><td>${s.passedLessons||0}/24</td><td>Week ${s.currentWeek||1}</td><td>${s.lastActivity?new Date(s.lastActivity).toLocaleString():"Never"}</td><td><button class="secondary" onclick="viewStudent('${s.uid}')">View</button></td></tr>`).join("");
+}
+async function loadStudents(){
+if(currentUser.role!=="admin")return;const users=(await db.ref("users").once("value")).val()||{};const students=Object.values(users).filter(u=>u.role==="student").sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+studentsTable.innerHTML=students.map(s=>`<tr><td>${escapeHtml(s.name||"")}</td><td>${escapeHtml(s.email||"")}</td><td>${s.progress||0}%</td><td>${s.passedLessons||0}/24</td><td>${s.status==="disabled"?"Disabled":"Active"}</td></tr>`).join("");
+}
+async function viewStudent(uid){
+const s=(await db.ref(`users/${uid}`).once("value")).val();if(!s)return;const practical=(await db.ref(`practicalTasks/${uid}`).once("value")).val()||{};let rows="";
+for(let n=1;n<=24;n++){const w=Math.ceil(n/3),i=(n-1)%3,l=lessons[w].items[i],r=s.lessonResults?.[n],t=practical["lesson"+n];rows+=`<tr><td>${n}</td><td>${escapeHtml(l.title)}</td><td>${r?r.score+"/15":"-"}</td><td>${r?r.percentage+"%":"-"}</td><td>${r?(r.passed?"✓ Passed":"✗ Failed"):"Not attempted"}</td><td>${t?`<button class="secondary" onclick="showTask('${uid}',${n})">View</button>`:"Not submitted"}</td></tr>`}
+studentDetail.innerHTML=`<div class="cards"><div class="card"><div class="label">Student</div><div class="stat" style="font-size:22px">${escapeHtml(s.name||"")}</div><p>${escapeHtml(s.email||"")}</p></div><div class="card"><div class="label">Progress</div><div class="stat">${s.progress||0}%</div></div><div class="card"><div class="label">Passed</div><div class="stat">${s.passedLessons||0}/24</div></div><div class="card"><div class="label">Week</div><div class="stat">${s.currentWeek||1}</div></div></div><div class="card"><h3>Detailed Assessment and Practical Record</h3><br><div class="table-wrap"><table class="admin-table"><thead><tr><th>#</th><th>Lesson</th><th>Score</th><th>%</th><th>Status</th><th>Practical</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;showPage("studentDetail");
+}
+async function showTask(uid,n){
+const t=(await db.ref(`practicalTasks/${uid}/lesson${n}`).once("value")).val();if(t)alert("PRACTICAL TASK - LESSON "+n+"\n\n"+t.response);
+}
+function openStudentModal(){studentModal.classList.remove("hidden");studentMessage.className="message"}
+function closeStudentModal(){studentModal.classList.add("hidden")}
+studentForm.addEventListener("submit",async e=>{
+e.preventDefault();const name=studentName.value.trim(),email=studentEmail.value.trim().toLowerCase(),password=studentPassword.value;
+if(password.length<6)return showStudentMessage("Password must contain at least 6 characters.","error");
+try{
+const users=(await db.ref("users").once("value")).val()||{};if(Object.values(users).some(u=>String(u.email||"").toLowerCase()===email))throw Error("This email is already registered.");
+const uid=db.ref("users").push().key,passwordHash=await hashPassword(password);
+await db.ref(`users/${uid}`).set({uid,name,email,passwordHash,role:"student",status:"active",progress:0,passedLessons:0,currentWeek:1,lessonResults:{},completedLessonsList:{},joinedAt:firebase.database.ServerValue.TIMESTAMP});
+showStudentMessage("Student account created successfully.","success");studentForm.reset();loadStudents();loadAdmin();setTimeout(closeStudentModal,900);
+}catch(err){showStudentMessage(err.message,"error")}
+});
+function showStudentMessage(msg,type){studentMessage.textContent=msg;studentMessage.className="message show "+type}
+
+document.getElementById("loginForm").addEventListener("submit",login);
+restoreSession();
+</script>
+</body>
+</html>
