@@ -1,0 +1,34 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "studentsByEmail": {
+      "$emailKey": {
+        ".read": true,
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['uid','email','salt','passwordHash','status'])"
+      }
+    },
+    "students": {
+      "$uid": { ".read": "auth != null", ".write": "auth != null" }
+    },
+    "questions": { ".read": true, ".write": "auth != null" },
+    "topics": { ".read": true, ".write": "auth != null" },
+    "assignments": {
+      "$uid": { ".read": true, ".write": "auth != null" }
+    },
+    "results": {
+      "$uid": { ".read": "auth != null", ".write": true }
+    },
+    "studentDevices": {
+      "$uid": { ".read": true, ".write": true }
+    },
+    "subscriptions": {
+      "$uid": {
+        ".read": true,
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['status','expiresAt'])"
+      }
+    }
+  }
+}
